@@ -8,8 +8,8 @@ public class Bullet : MonoBehaviour
 
     
     public float bulletSpeed;
-    
-   
+
+    public int bulletPower;
     public void ShotBullet(Vector3 direction)
     {
         //バレットの移動処理
