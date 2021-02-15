@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameObject bulletPrefab;
 
-    
+    private Gamemanager gamemanager;
 
     void Start()
     {
@@ -18,6 +18,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(gamemanager.isGameUp)
+        {
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 tapPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -35,5 +40,10 @@ public class PlayerController : MonoBehaviour
     {
         GameObject bulletObj =  Instantiate(bulletPrefab, transform);
         bulletObj.GetComponent<Bullet>().ShotBullet(direction);
+    }
+
+    public void SetUpPlayer(Gamemanager gamemanager)
+    {
+        this.gamemanager = gamemanager;
     }
 }

@@ -1,17 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
 
 [RequireComponent(typeof(CapsuleCollider2D))]
 public class EnemyController : MonoBehaviour
 {
 
-    public int enemyHp = 100;
+    public int hp;
     public int attackPower;
     public float enemySpeed;
-    void Start()
+
+    [SerializeField]
+    private Slider slider;
+
+    private int maxHp;
+    
+    public void SetUpEnemy()
     {
-        
+        transform.localPosition = new Vector3(transform.localPosition.x + Random.Range(-650, 650), transform.localPosition.y, 0);
+
+        maxHp = hp;
+
+        DisplayHpGauge();
     }
 
     // Update is called once per frame
@@ -33,9 +45,9 @@ public class EnemyController : MonoBehaviour
 
             DestroyBullet(collision);
 
-            if(collision.gameObject.TryGetComponent(out Bullet bullet))
+            if (collision.gameObject.TryGetComponent(out Bullet bullet))
             {
-                DestroyBullet(collision);
+                UpdateHP(bullet);
             }
 
             
@@ -58,14 +70,23 @@ public class EnemyController : MonoBehaviour
     private void UpdateHP(Bullet bullet)
     {
         //HPを15減らす
-        enemyHp -= bullet.bulletPower;
+        hp -= bullet.bulletPower;
+
+        maxHp = Mathf.Clamp(maxHp, 0, maxHp);
+
+        DisplayHpGauge();
 
         //hpが0以下になったら
-        if (enemyHp <= 0)
+        if (hp <= 0)
         {
-            enemyHp = 0;
+            hp = 0;
             Destroy(gameObject);
         }
+    }
+
+    private void DisplayHpGauge()
+    {
+        slider.DOValue((float)hp / maxHp, 0.25f);
     }
 
 }

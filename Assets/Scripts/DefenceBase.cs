@@ -17,10 +17,14 @@ public class DefenceBase : MonoBehaviour
     [SerializeField]
     private Slider slider;
 
+    private Gamemanager gameManager;
+
     private int maxDurability;
 
-    private void Start()
+    public void SetUpDefenceBase(Gamemanager gameManager)
     {
+        this.gameManager = gameManager;
+
         maxDurability = durability;
 
         DisplayDurability();
@@ -51,9 +55,10 @@ public class DefenceBase : MonoBehaviour
         DisplayDurability();
 
         // TODO 耐久力が0以下になってないか確認
-        if(durability <= 0)
+        if(durability <= 0 && gameManager.isGameUp == false)
         {
             // TODO 耐久力が0以下なら、ゲームオーバー判定を行う
+            gameManager.SwiychGameUp(true);
         }
 
     }
