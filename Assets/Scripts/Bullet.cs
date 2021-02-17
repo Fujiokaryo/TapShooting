@@ -14,7 +14,6 @@ public class Bullet : MonoBehaviour
     {
         //バレットの移動処理
         GetComponent<Rigidbody2D>().AddForce(direction * bulletSpeed);
-
         //5秒後にバレットを破壊する
         Destroy(gameObject, 5f);
     }

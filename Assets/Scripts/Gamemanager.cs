@@ -15,6 +15,9 @@ public class Gamemanager : MonoBehaviour
     [SerializeField]
     private PlayerController playerController;
 
+    [SerializeField]
+    private Transform temporaryObjectContainerTran;
+
     void Start()
     {
         SwitchGameUp(false);
@@ -24,6 +27,10 @@ public class Gamemanager : MonoBehaviour
         playerController.SetUpPlayer(this);
 
         enemyGenerator.SetUpEnemyGenerator(this);
+
+        //TransformHelper.SetTemporaryObjectContainerTran(temporaryObjectContainerTran);
+
+        TransformHelper.TemporaryObjectContainerTran = temporaryObjectContainerTran;
     }
 
     // Update is called once per frame

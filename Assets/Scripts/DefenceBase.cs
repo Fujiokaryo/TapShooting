@@ -79,7 +79,9 @@ public class DefenceBase : MonoBehaviour
     {
         GameObject damageEffect = Instantiate(enemyAttackEffect, enemyTransform, false);
 
-        damageEffect.transform.SetParent(transform);
+        //damageEffect.transform.SetParent(TransformHelper.GetTemporaryObjectContainerTran());
+
+        damageEffect.transform.SetParent(TransformHelper.TemporaryObjectContainerTran);
 
         Destroy(damageEffect, 1f);
     }
