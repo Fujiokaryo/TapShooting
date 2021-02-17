@@ -343,6 +343,8 @@ MonoBehaviour:
   attackPower: 50
   enemySpeed: -0.01
   slider: {fileID: 8097620345648441767}
+  bulletEffect: {fileID: 1496645969569029206, guid: 469957493bfbd7846af46e03422afc50,
+    type: 3}
 --- !u!1 &8097620346436162274
 GameObject:
   m_ObjectHideFlags: 0

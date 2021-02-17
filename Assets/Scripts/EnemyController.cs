@@ -15,6 +15,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private Slider slider;
 
+    [SerializeField]
+    private GameObject bulletEffect;
+
     private int maxHp;
     
     public void SetUpEnemy()
@@ -44,13 +47,13 @@ public class EnemyController : MonoBehaviour
         {
 
             DestroyBullet(collision);
+            GenerateBulletEffect(collision.gameObject.transform);
 
             if (collision.gameObject.TryGetComponent(out Bullet bullet))
             {
                 UpdateHP(bullet);
             }
 
-            
         }
 
     }
@@ -87,6 +90,15 @@ public class EnemyController : MonoBehaviour
     private void DisplayHpGauge()
     {
         slider.DOValue((float)hp / maxHp, 0.25f);
+    }
+
+    private void GenerateBulletEffect(Transform bulletTran)
+    {
+        GameObject effect = Instantiate(bulletEffect, bulletTran, false);
+
+        effect.transform.SetParent(transform);
+
+        Destroy(effect, 3f);
     }
 
 }
