@@ -14,7 +14,6 @@ public class EnemyGenerator : MonoBehaviour
 
     private float timer;
 
-
     private Gamemanager gamemanager;
 
     public void SetUpEnemyGenerator(Gamemanager gamemanager)

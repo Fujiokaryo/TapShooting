@@ -17,6 +17,9 @@ public class DefenceBase : MonoBehaviour
     [SerializeField]
     private Slider slider;
 
+    [SerializeField]
+    private GameObject enemyAttackEffect;
+
     private Gamemanager gameManager;
 
     private int maxDurability;
@@ -36,6 +39,8 @@ public class DefenceBase : MonoBehaviour
     {
         if(collision.gameObject.tag == "Enemy")
         {
+            GenerateEnemyAttackEffect(collision.gameObject.transform);
+
             if(collision.gameObject.TryGetComponent(out EnemyController enemy))
             {
                 UpdateDurability(enemy);
@@ -58,7 +63,7 @@ public class DefenceBase : MonoBehaviour
         if(durability <= 0 && gameManager.isGameUp == false)
         {
             // TODO 耐久力が0以下なら、ゲームオーバー判定を行う
-            gameManager.SwiychGameUp(true);
+            gameManager.SwitchGameUp(true);
         }
 
     }
@@ -68,5 +73,14 @@ public class DefenceBase : MonoBehaviour
         txtDurability.text = durability + " / " + maxDurability;
 
         slider.DOValue((float)durability / maxDurability, 0.25f);
+    }
+
+    void GenerateEnemyAttackEffect(Transform enemyTransform)
+    {
+        GameObject damageEffect = Instantiate(enemyAttackEffect, enemyTransform, false);
+
+        damageEffect.transform.SetParent(transform);
+
+        Destroy(damageEffect, 1f);
     }
 }

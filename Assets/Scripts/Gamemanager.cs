@@ -17,7 +17,7 @@ public class Gamemanager : MonoBehaviour
 
     void Start()
     {
-        SwiychGameUp(false);
+        SwitchGameUp(false);
 
         defenceBase.SetUpDefenceBase(this);
 
@@ -28,7 +28,7 @@ public class Gamemanager : MonoBehaviour
 
     // Update is called once per frame
     
-    public void SwiychGameUp(bool isSwitch)
+    public void SwitchGameUp(bool isSwitch)
     {
         isGameUp = isSwitch;
     }
