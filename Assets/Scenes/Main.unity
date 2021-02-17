@@ -565,7 +565,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d31bd5d54a95bec4a9cd918bb9af91a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  durability: 100
+  durability: 300
   txtDurability: {fileID: 1456516363}
   slider: {fileID: 1859937498}
   enemyAttackEffect: {fileID: 171033022449022938, guid: 266d522373533834aa5f5ea78880f6e3,
@@ -1489,6 +1489,9 @@ MonoBehaviour:
   enemyObjPrefab: {fileID: 8097620346351936308, guid: db0a71fb948020143a990f374fc5005f,
     type: 3}
   preparateTime: 1
+  maxGenerate: 3
+  isGenerateEnd: 0
+  isBossDestroyed: 0
 --- !u!1 &1787834140
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,15 +16,26 @@ public class EnemyGenerator : MonoBehaviour
 
     private Gamemanager gamemanager;
 
+    public int maxGenerate;
+
+    public bool isGenerateEnd;
+
+    public bool isBossDestroyed;
+
     public void SetUpEnemyGenerator(Gamemanager gamemanager)
     {
         this.gamemanager = gamemanager;
     }
     void Update()
     {
-        if(!gamemanager.isGameUp)
+        if(isGenerateEnd)
         {
-            PreparateGenerateEnemy();
+            return;
+        }
+
+        if(!gamemanager.isGameUp)
+        {           
+                PreparateGenerateEnemy();
         }
 
         
@@ -42,6 +53,15 @@ public class EnemyGenerator : MonoBehaviour
 
             generateCount++;
 
+            if(generateCount >= maxGenerate)
+            {
+                isGenerateEnd = true;
+
+                Debug.Log("生成完了+ボス出現演出");
+
+                StartCoroutine(GenerateBoss());
+            }
+
         }
     }
 
@@ -54,5 +74,23 @@ public class EnemyGenerator : MonoBehaviour
        enemyController.SetUpEnemy();
     }
 
-    
+    private IEnumerator GenerateBoss()
+    {
+        // TODO ボス出現の警告演出
+
+        yield return new WaitForSeconds(1.0f);
+
+        // TODO ボス生成
+
+
+        //ボス討伐(仮
+        SwitchBossDestroyed(true);
+    }
+
+    public void SwitchBossDestroyed(bool switchBossDestroyed)
+    {
+        isBossDestroyed = switchBossDestroyed;
+
+        gamemanager.SwitchGameUp(isBossDestroyed);
+    }
 }
