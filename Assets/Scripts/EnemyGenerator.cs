@@ -65,13 +65,18 @@ public class EnemyGenerator : MonoBehaviour
         }
     }
 
-    private void GenerateEnemy()
+    private void GenerateEnemy(bool isBoss = false)
     {
        GameObject enemySetObj = Instantiate(enemyObjPrefab, transform, false);
 
        EnemyController enemyController = enemySetObj.GetComponent<EnemyController>();
 
-       enemyController.SetUpEnemy();
+       enemyController.SetUpEnemy(isBoss);
+
+        if(isBoss)
+        {
+            enemyController.AdditionalSetUPEnemy(this);
+        }
     }
 
     private IEnumerator GenerateBoss()
@@ -81,10 +86,9 @@ public class EnemyGenerator : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         // TODO ボス生成
+        GenerateEnemy(true);
 
 
-        //ボス討伐(仮
-        SwitchBossDestroyed(true);
     }
 
     public void SwitchBossDestroyed(bool switchBossDestroyed)
@@ -92,5 +96,7 @@ public class EnemyGenerator : MonoBehaviour
         isBossDestroyed = switchBossDestroyed;
 
         gamemanager.SwitchGameUp(isBossDestroyed);
+
+        gamemanager.PreparateGameClear();
     }
 }

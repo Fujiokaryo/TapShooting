@@ -64,6 +64,8 @@ public class DefenceBase : MonoBehaviour
         {
             // TODO 耐久力が0以下なら、ゲームオーバー判定を行う
             gameManager.SwitchGameUp(true);
+
+            gameManager.PreparateGameOver();
         }
 
     }

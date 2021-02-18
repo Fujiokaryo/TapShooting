@@ -8,8 +8,8 @@ using DG.Tweening;
 public class EnemyController : MonoBehaviour
 {
 
-    public int hp;
-    public int attackPower;
+    public int hp; //エネミーのHP
+    public int attackPower;　//エネミーの攻撃力
     public float enemySpeed;
 
     [SerializeField]
@@ -19,10 +19,33 @@ public class EnemyController : MonoBehaviour
     private GameObject bulletEffect;
 
     private int maxHp;
+
+    private bool isBoss;
+
+    private EnemyGenerator enemyGenerator;
     
-    public void SetUpEnemy()
+    public void SetUpEnemy(bool isBoss = false)
     {
-        transform.localPosition = new Vector3(transform.localPosition.x + Random.Range(-650, 650), transform.localPosition.y, 0);
+        this.isBoss = isBoss;
+
+        if(!this.isBoss)
+        {
+            transform.localPosition = new Vector3(transform.localPosition.x + Random.Range(-650, 650), transform.localPosition.y, 0);
+        }
+        else
+        {
+            //ボスの位置を徐々に下方向に変更
+            transform.DOLocalMoveY(transform.localPosition.y - 500, 3.0f);
+
+            //ボスの場合、サイズを大きくする
+            transform.localScale = Vector3.one * 2.0f;
+
+            //HPゲージの位置を高い位置にする
+            slider.transform.localPosition = new Vector3(0, 150, 0);
+
+            //HPを3倍にする
+            hp *= 3;
+        }
 
         maxHp = hp;
 
@@ -32,12 +55,11 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       transform.Translate(0, enemySpeed, 0);
-
-        if(gameObject.transform.position.y < -1500)
+        if(!isBoss)
         {
-            Destroy(gameObject);
+            transform.Translate(0, enemySpeed, 0);
         }
+
 
     }
 
@@ -47,11 +69,13 @@ public class EnemyController : MonoBehaviour
         {
 
             DestroyBullet(collision);
-            GenerateBulletEffect(collision.gameObject.transform);
+            
 
             if (collision.gameObject.TryGetComponent(out Bullet bullet))
             {
                 UpdateHP(bullet);
+
+                GenerateBulletEffect(collision.gameObject.transform);
             }
 
         }
@@ -75,6 +99,7 @@ public class EnemyController : MonoBehaviour
         //HPを15減らす
         hp -= bullet.bulletPower;
 
+        //HPの上下限の設定
         maxHp = Mathf.Clamp(maxHp, 0, maxHp);
 
         DisplayHpGauge();
@@ -83,6 +108,14 @@ public class EnemyController : MonoBehaviour
         if (hp <= 0)
         {
             hp = 0;
+
+            //ボスの場合
+            if(isBoss)
+            {
+                //ボス討伐済みのフラグをたてる
+                enemyGenerator.SwitchBossDestroyed(true);
+            }
+
             Destroy(gameObject);
         }
     }
@@ -99,6 +132,13 @@ public class EnemyController : MonoBehaviour
         effect.transform.SetParent(transform);
 
         Destroy(effect, 3f);
+    }
+
+    public void AdditionalSetUPEnemy(EnemyGenerator enemyGenerator)
+    {
+        //引数で届いた情報を変数に代入してスクリプト内で利用可能にする
+        this.enemyGenerator = enemyGenerator;
+
     }
 
 }
