@@ -847,8 +847,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   durability: 100
-  txtDurability: {fileID: 1456516363}
-  slider: {fileID: 1859937498}
   enemyAttackEffect: {fileID: 171033022449022938, guid: 266d522373533834aa5f5ea78880f6e3,
     type: 3}
 --- !u!50 &738064789
@@ -1332,6 +1330,8 @@ MonoBehaviour:
   canvasGroupGameClear: {fileID: 1786675632}
   canvasGroupGameOver: {fileID: 613027396}
   txtGameOver: {fileID: 357142409}
+  txtDurability: {fileID: 1456516363}
+  slider: {fileID: 1859937498}
 --- !u!4 &1053581548
 Transform:
   m_ObjectHideFlags: 0

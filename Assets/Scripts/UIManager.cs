@@ -14,6 +14,12 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text txtGameOver;
 
+    [SerializeField]
+    private Text txtDurability;
+
+    [SerializeField]
+    private Slider slider;
+
     /// <summary>
     /// ゲームクリア表示を見えなくする
     /// </summary>
@@ -54,5 +60,12 @@ public class UIManager : MonoBehaviour
         //DOTextメソッドを利用して文字列を1文字ずつ順番に同じ表示時間で表示
         txtGameOver.DOText(txt, 1.5f).SetEase(Ease.Linear);
 
+    }
+
+    public void DisplayDurability(int durability, int maxDurability)
+    {
+        txtDurability.text = durability + " / " + maxDurability;
+
+        slider.DOValue((float)durability / maxDurability, 0.25f);
     }
 }
