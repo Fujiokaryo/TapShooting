@@ -5,12 +5,12 @@ using UnityEngine;
 public class EnemyGenerator : MonoBehaviour
 {
     [SerializeField]
-    private GameObject enemyObjPrefab;
+    private GameObject enemyObjPrefab; //エネミーのプレファブ
 
     [SerializeField]
-    public float preparateTime;
+    public float preparateTime; //エネミー生成までの時間
 
-    private int generateCount;
+    private int generateCount; //生成下エネミーの数をカウント
 
     private float timer;
 
@@ -22,9 +22,23 @@ public class EnemyGenerator : MonoBehaviour
 
     public bool isBossDestroyed;
 
+    public EnemyDataSO enemyDataSO;
+
+    public List<EnemyDataSO.EnemyData> normalEnemyDatas = new List<EnemyDataSO.EnemyData>();
+
+    public List<EnemyDataSO.EnemyData> bossEnemyDatas = new List<EnemyDataSO.EnemyData>();
+
+    /// <summary>
+    /// EnemyGanaratorの設定
+    /// </summary>
+    /// <param name="gamemanager"></param>
     public void SetUpEnemyGenerator(Gamemanager gamemanager)
     {
         this.gamemanager = gamemanager;
+
+        normalEnemyDatas = GetEnemyTypeList(EnemyType.Normal);
+
+        bossEnemyDatas = GetEnemyTypeList(EnemyType.Boss);
     }
     void Update()
     {
@@ -65,18 +79,38 @@ public class EnemyGenerator : MonoBehaviour
         }
     }
 
-    private void GenerateEnemy(bool isBoss = false)
+    private void GenerateEnemy(EnemyType enemyType = EnemyType.Normal)
     {
+       //ランダムな値を代入するための変数を宣言
+       int randomEnemyNo;
+
+       //EnemyDataを代入するための変数を宣言
+       EnemyDataSO.EnemyData enemyData = null;
+
+        //EnemyTypeに合わせて生成するエネミーの種類を決定しそのエネミーの種類毎のリストからランダムなEnemyDataを取得
+        switch (enemyType)
+        {
+            case EnemyType.Normal:
+                randomEnemyNo = Random.Range(0, normalEnemyDatas.Count);
+                enemyData = normalEnemyDatas[randomEnemyNo];
+                break;
+
+            case EnemyType.Boss:
+                randomEnemyNo = Random.Range(0, bossEnemyDatas.Count);
+                enemyData = bossEnemyDatas[randomEnemyNo];
+                break;
+
+        }
+
+
        GameObject enemySetObj = Instantiate(enemyObjPrefab, transform, false);
 
        EnemyController enemyController = enemySetObj.GetComponent<EnemyController>();
 
-       enemyController.SetUpEnemy(isBoss);
-
-        if(isBoss)
-        {
-            enemyController.AdditionalSetUPEnemy(this);
-        }
+       enemyController.SetUpEnemy(enemyData);
+       
+       enemyController.AdditionalSetUPEnemy(this);
+        
     }
 
     private IEnumerator GenerateBoss()
@@ -86,7 +120,7 @@ public class EnemyGenerator : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         // TODO ボス生成
-        GenerateEnemy(true);
+        GenerateEnemy(EnemyType.Boss);
 
 
     }
@@ -98,5 +132,29 @@ public class EnemyGenerator : MonoBehaviour
         gamemanager.SwitchGameUp(isBossDestroyed);
 
         gamemanager.PreparateGameClear();
+    }
+    /// <summary>
+    /// 引数で指定されたエネミーの種類のListを作成し、作成した値を戻り値で返す
+    /// </summary>
+    /// <param name="enemyType"></param>
+    /// <returns></returns>
+    private List<EnemyDataSO.EnemyData> GetEnemyTypeList(EnemyType enemyType)
+    {
+        //引数で受け取ったEnemyTypeのEnemyDataだけが代入されるListを用意する
+        List<EnemyDataSO.EnemyData> enemyDatas = new List<EnemyDataSO.EnemyData>();
+
+        //引数で受け取ったEnemyTypeのエネミーのデータだけをスクリプタブル・オブジェクトより抽出してリストに追加する
+        for(int i = 0; i < enemyDataSO.enemyDataList.Count; i++)
+        {
+            //1つずつEnemyData内の情報にあるEnemyTypeを確認し、それが引数で受け取ったEnemyTypeと同じTypeの情報の場合
+            if(enemyDataSO.enemyDataList[i].enemyType == enemyType)
+            {
+                //用意しておいたListにEnemyDataを追加する。これによりListにはEnemyTypeが引数で届いたTypeのEnemyDataのみが抽出される
+                enemyDatas.Add(enemyDataSO.enemyDataList[i]);
+            }
+        }
+
+        //抽出結果が代入されているListを処理結果として戻り値として返す
+        return enemyDatas;
     }
 }

@@ -16,5 +16,6 @@ public class EnemyDataSO : ScriptableObject
         public int power;
         public Sprite enemySprite;
         public EnemyType enemyType;
+        public int exp;
     }
 }

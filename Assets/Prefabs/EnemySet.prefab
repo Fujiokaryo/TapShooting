@@ -339,7 +339,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200f0fcb19b50354fab690700b60a455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 100
+  enemyData:
+    no: 0
+    hp: 0
+    power: 0
+    enemySprite: {fileID: 0}
+    enemyType: 0
+  imgEnemy: {fileID: 8097620345680914397}
   attackPower: 50
   enemySpeed: -0.01
   slider: {fileID: 8097620345648441767}

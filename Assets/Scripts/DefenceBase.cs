@@ -46,7 +46,9 @@ public class DefenceBase : MonoBehaviour
 
     void UpdateDurability(EnemyController enemy)
     {
-        durability -= enemy.attackPower;
+        durability -= enemy.enemyData.power;
+
+        Debug.Log("エネミーの攻撃力 :" + enemy.enemyData.power);
 
         durability = Mathf.Clamp(durability, 0, maxDurability);
 

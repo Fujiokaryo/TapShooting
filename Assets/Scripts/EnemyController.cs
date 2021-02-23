@@ -7,9 +7,12 @@ using DG.Tweening;
 [RequireComponent(typeof(CapsuleCollider2D))]
 public class EnemyController : MonoBehaviour
 {
+    [Header("エネミーのデータ情報")]
+    public EnemyDataSO.EnemyData enemyData;
 
-    public int hp; //エネミーのHP
-    public int attackPower;　//エネミーの攻撃力
+    [SerializeField]
+    private Image imgEnemy; //エネミーの画像設定用
+
     public float enemySpeed;
 
     [SerializeField]
@@ -20,22 +23,22 @@ public class EnemyController : MonoBehaviour
 
     private int maxHp;
 
-    private bool isBoss;
+    private int hp;
 
     private EnemyGenerator enemyGenerator;
     
-    public void SetUpEnemy(bool isBoss = false)
+    public void SetUpEnemy(EnemyDataSO.EnemyData enemyData)
     {
-        this.isBoss = isBoss;
+        this.enemyData = enemyData;
 
-        if(!this.isBoss)
+        if(this.enemyData.enemyType != EnemyType.Boss)
         {
             transform.localPosition = new Vector3(transform.localPosition.x + Random.Range(-650, 650), transform.localPosition.y, 0);
         }
         else
         {
             //ボスの位置を徐々に下方向に変更
-            transform.DOLocalMoveY(transform.localPosition.y - 500, 3.0f);
+            transform.DOLocalMoveY(transform.localPosition.y - 700, 3.0f);
 
             //ボスの場合、サイズを大きくする
             transform.localScale = Vector3.one * 2.0f;
@@ -43,11 +46,13 @@ public class EnemyController : MonoBehaviour
             //HPゲージの位置を高い位置にする
             slider.transform.localPosition = new Vector3(0, 150, 0);
 
-            //HPを3倍にする
-            hp *= 3;
         }
+        //画像をEnemyDataの画像にする
+        imgEnemy.sprite = this.enemyData.enemySprite;
 
-        maxHp = hp;
+        maxHp = this.enemyData.hp;
+
+        hp = maxHp;
 
         DisplayHpGauge();
     }
@@ -55,7 +60,7 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!isBoss)
+        if(enemyData.enemyType != EnemyType.Boss)
         {
             transform.Translate(0, enemySpeed, 0);
         }
@@ -88,8 +93,6 @@ public class EnemyController : MonoBehaviour
     /// <param name="col"></param>
     private void DestroyBullet(Collider2D col)
     {
-        Debug.Log("当たったオブジェクト" + col.gameObject.tag);
-
         Destroy(col.gameObject);      
     }
 
@@ -110,7 +113,7 @@ public class EnemyController : MonoBehaviour
             hp = 0;
 
             //ボスの場合
-            if(isBoss)
+            if(enemyData.enemyType == EnemyType.Boss)
             {
                 //ボス討伐済みのフラグをたてる
                 enemyGenerator.SwitchBossDestroyed(true);
