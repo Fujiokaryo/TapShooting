@@ -9,11 +9,10 @@ using UnityEngine.Events;
 public class MoveEventSO : ScriptableObject
 {
     private const float moveLimit = -3000f;
-    private EnemyDataSO.EnemyData enemyData;
     public UnityAction<Transform, float> GetMoveEvent(MoveType moveType)
     {
         //moveTypeで分岐
-        switch (enemyData.moveType)
+        switch (moveType)
         {
             case MoveType.Straight:
                 return MoveStraight;
@@ -33,6 +32,7 @@ public class MoveEventSO : ScriptableObject
     private void MoveStraight(Transform tran, float duration)
     {
         tran.DOLocalMoveY(moveLimit, duration);
+        Debug.Log("直進");
     }
 
     private void MoveMeandering(Transform tran, float duration)
@@ -40,13 +40,14 @@ public class MoveEventSO : ScriptableObject
         tran.DOLocalMoveX(tran.position.x + Random.Range(200f, 400f), 1f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.Linear);
 
         tran.DOLocalMoveY(moveLimit, duration);
+        Debug.Log("蛇行");
     }
 
     public void MoveBossHorizontal(Transform tran, float duration)
     {
         tran.localPosition = new Vector3(0, tran.localPosition.y, tran.localPosition.z);
 
-        tran.DOLocalMoveY(-800, 3.0f).OnComplete(()
+        tran.DOLocalMoveY(-500, 3.0f).OnComplete(()
             => {
                 Sequence sequence = DOTween.Sequence();
                 sequence.Append(tran.DOLocalMoveX(tran.localPosition.x + 550, 2.5f).SetEase(Ease.Linear));
@@ -55,6 +56,7 @@ public class MoveEventSO : ScriptableObject
                 sequence.AppendInterval(1.0f).SetLoops(-1, LoopType.Restart);
 
             });
+        Debug.Log("ボス水平");
     }
 
     public void  Stop(Transform tran, float duration)

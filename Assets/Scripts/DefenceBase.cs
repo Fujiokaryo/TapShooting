@@ -34,23 +34,33 @@ public class DefenceBase : MonoBehaviour
     {
         if(collision.gameObject.tag == "Enemy")
         {
+            //ダメージの設定用
+            int damage = 0;
+
+            //侵入してきたコライダをオフにする（重複判定の防止）
+            collision.GetComponent<CapsuleCollider2D>().enabled = false;
+            
+            if(collision.gameObject.TryGetComponent(out Bullet bullet))
+            {
+                damage = bullet.bulletPower;
+            }
+            else if(collision.gameObject.TryGetComponent(out EnemyController enemy))
+            {
+                damage = enemy.enemyData.power;
+            }
+            UpdateDurability(damage);
+
             GenerateEnemyAttackEffect(collision.gameObject.transform);
 
-            if(collision.gameObject.TryGetComponent(out EnemyController enemy))
-            {
-                UpdateDurability(enemy);
-            }
-
-            
             Destroy(collision.gameObject);
         }
     }
 
-    void UpdateDurability(EnemyController enemy)
+    void UpdateDurability(int damage)
     {
-        durability -= enemy.enemyData.power;
+        durability -= damage;
 
-        Debug.Log("エネミーの攻撃力 :" + enemy.enemyData.power);
+        Debug.Log("エネミーからのダメージ :" + damage);
 
         durability = Mathf.Clamp(durability, 0, maxDurability);
 

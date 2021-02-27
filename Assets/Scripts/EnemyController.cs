@@ -19,6 +19,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private GameObject bulletEffect;
 
+    [SerializeField]
+    private GameObject enemyBulletPrefab;
+
     private int maxHp;
 
     private int hp;
@@ -26,6 +29,7 @@ public class EnemyController : MonoBehaviour
     private EnemyGenerator enemyGenerator;
 
     private UnityAction<Transform, float> moveEvent;
+
     /// <summary>
     /// エネミーの設定
     /// </summary>
@@ -142,9 +146,38 @@ public class EnemyController : MonoBehaviour
         //引数で届いた情報を変数に代入してスクリプト内で利用可能にする
         this.enemyGenerator = enemyGenerator;
 
+        //MoveEventSOスクリプタブルオブジェクトのGetMoveEventメソッドを実行し、戻り値で移動用のメソッドを受け取る
         moveEvent = this.enemyGenerator.moveEventSO.GetMoveEvent(enemyData.moveType);
 
         moveEvent.Invoke(transform, enemyData.moveDuration);
+
+        Debug.Log("追加設定完了");
+
+        if(enemyData.moveType == MoveType.Straight || enemyData.moveType == MoveType.Boss_Horizontal)
+        {
+            StartCoroutine(EnemyShot());
+        }
+
+    }
+
+    private IEnumerator EnemyShot()
+    {
+        while(true)
+        {
+            //エネミーのバレットのクローンを生成し、戻り値をbulletObjに代入
+           GameObject bulletObj = Instantiate(enemyBulletPrefab, transform);
+
+            //クローンのゲームオブジェクトからBulletスクリプトを取得してShotBulletメソッドを実行する
+            bulletObj.GetComponent<Bullet>().ShotBullet(enemyGenerator.PreparateGetPlayerDirection(transform.position));
+
+            if(enemyData.moveType == MoveType.Boss_Horizontal)
+            {
+                //バレットとエネミーの親子関係を解消し、バレットの親をTemporaryObjectContainerオブジェクトに変更する
+                bulletObj.transform.SetParent(TransformHelper.GetTemporaryObjectContainerTran());
+            }
+
+            yield return new WaitForSeconds(5f);
+        }
 
     }
     

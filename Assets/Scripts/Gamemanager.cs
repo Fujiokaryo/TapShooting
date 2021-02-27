@@ -55,4 +55,9 @@ public class Gamemanager : MonoBehaviour
     {
         uiManager.DisplayGameOverSet();
     }
+
+    public Vector3 GetPlayerDirection(Vector3 enemyPos)
+    {
+        return (playerController.transform.position - enemyPos).normalized;
+    }
 }
