@@ -31,8 +31,6 @@ public class Gamemanager : MonoBehaviour
 
         enemyGenerator.SetUpEnemyGenerator(this);
 
-        //TransformHelper.SetTemporaryObjectContainerTran(temporaryObjectContainerTran);
-
         TransformHelper.TemporaryObjectContainerTran = temporaryObjectContainerTran;
 
         uiManager.HideGameClearSet();

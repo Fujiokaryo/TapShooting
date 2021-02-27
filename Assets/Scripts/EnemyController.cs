@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-
+using UnityEngine.Events;
 [RequireComponent(typeof(CapsuleCollider2D))]
 public class EnemyController : MonoBehaviour
 {
@@ -12,8 +12,6 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField]
     private Image imgEnemy; //エネミーの画像設定用
-
-    public float enemySpeed;
 
     [SerializeField]
     private Slider slider;
@@ -26,7 +24,12 @@ public class EnemyController : MonoBehaviour
     private int hp;
 
     private EnemyGenerator enemyGenerator;
-    
+
+    private UnityAction<Transform, float> moveEvent;
+    /// <summary>
+    /// エネミーの設定
+    /// </summary>
+    /// <param name="enemyData"></param>
     public void SetUpEnemy(EnemyDataSO.EnemyData enemyData)
     {
         this.enemyData = enemyData;
@@ -37,9 +40,6 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            //ボスの位置を徐々に下方向に変更
-            transform.DOLocalMoveY(transform.localPosition.y - 700, 3.0f);
-
             //ボスの場合、サイズを大きくする
             transform.localScale = Vector3.one * 2.0f;
 
@@ -55,18 +55,9 @@ public class EnemyController : MonoBehaviour
         hp = maxHp;
 
         DisplayHpGauge();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(enemyData.enemyType != EnemyType.Boss)
-        {
-            transform.Translate(0, enemySpeed, 0);
-        }
-
 
     }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -96,7 +87,10 @@ public class EnemyController : MonoBehaviour
         Destroy(col.gameObject);      
     }
 
-
+    /// <summary>
+    /// Hpの更新処理とエネミーーの破壊確認処理
+    /// </summary>
+    /// <param name="bullet"></param>
     private void UpdateHP(Bullet bullet)
     {
         //HPを15減らす
@@ -118,6 +112,12 @@ public class EnemyController : MonoBehaviour
                 //ボス討伐済みのフラグをたてる
                 enemyGenerator.SwitchBossDestroyed(true);
             }
+
+            //ExpをTotaExpに加算
+            GameData.instance.UpDateTotalExp(enemyData.exp);
+
+            //最新のTotalExpを利用して表示更新
+            enemyGenerator.PreparateDisplayTotalExp(enemyData.exp);
 
             Destroy(gameObject);
         }
@@ -142,6 +142,10 @@ public class EnemyController : MonoBehaviour
         //引数で届いた情報を変数に代入してスクリプト内で利用可能にする
         this.enemyGenerator = enemyGenerator;
 
-    }
+        moveEvent = this.enemyGenerator.moveEventSO.GetMoveEvent(enemyData.moveType);
 
+        moveEvent.Invoke(transform, enemyData.moveDuration);
+
+    }
+    
 }

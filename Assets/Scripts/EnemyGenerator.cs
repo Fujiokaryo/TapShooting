@@ -24,9 +24,11 @@ public class EnemyGenerator : MonoBehaviour
 
     public EnemyDataSO enemyDataSO;
 
-    public List<EnemyDataSO.EnemyData> normalEnemyDatas = new List<EnemyDataSO.EnemyData>();
+    private List<EnemyDataSO.EnemyData> normalEnemyDatas = new List<EnemyDataSO.EnemyData>();
 
-    public List<EnemyDataSO.EnemyData> bossEnemyDatas = new List<EnemyDataSO.EnemyData>();
+    private List<EnemyDataSO.EnemyData> bossEnemyDatas = new List<EnemyDataSO.EnemyData>();
+
+    public MoveEventSO moveEventSO; //エネミー移動用のスクリプタブルオブジェクト
 
     /// <summary>
     /// EnemyGanaratorの設定
@@ -39,6 +41,8 @@ public class EnemyGenerator : MonoBehaviour
         normalEnemyDatas = GetEnemyTypeList(EnemyType.Normal);
 
         bossEnemyDatas = GetEnemyTypeList(EnemyType.Boss);
+
+        maxGenerate = GameData.instance.GetMaxGenerateCount();
     }
     void Update()
     {
@@ -156,5 +160,17 @@ public class EnemyGenerator : MonoBehaviour
 
         //抽出結果が代入されているListを処理結果として戻り値として返す
         return enemyDatas;
+    }
+
+    /// <summary>
+    /// TotalExpの表示更新準備
+    /// </summary>
+    /// <param name="exp"></param>
+    public void PreparateDisplayTotalExp(int exp)
+    {
+        //GameManagerスクリプトからUIManagerスクリプトのUpdateDisplayTptalExpメソッドを実行する
+        gamemanager.uiManager.UpdateDisplayTotalExp(GameData.instance.GetTotalExp());
+
+        // TODO 引数のexp変数は後々利用する
     }
 }

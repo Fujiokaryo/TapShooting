@@ -20,6 +20,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Slider slider;
 
+    [SerializeField]
+    private Text txtTotalExp;
+
     /// <summary>
     /// ゲームクリア表示を見えなくする
     /// </summary>
@@ -61,11 +64,24 @@ public class UIManager : MonoBehaviour
         txtGameOver.DOText(txt, 1.5f).SetEase(Ease.Linear);
 
     }
-
+    /// <summary>
+    /// 耐久度の表示更新
+    /// </summary>
+    /// <param name="durability"></param>
+    /// <param name="maxDurability"></param>
     public void DisplayDurability(int durability, int maxDurability)
     {
         txtDurability.text = durability + " / " + maxDurability;
 
         slider.DOValue((float)durability / maxDurability, 0.25f);
+    }
+
+    /// <summary>
+    /// TotalExpの表示更新
+    /// </summary>
+    /// <param name="totalExp"></param>
+    public void UpdateDisplayTotalExp(int totalExp)
+    {
+        txtTotalExp.text = totalExp.ToString();
     }
 }

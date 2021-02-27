@@ -19,15 +19,21 @@ MonoBehaviour:
     enemySprite: {fileID: 21300000, guid: ef98571bd32fde141815e2d2488868ee, type: 3}
     enemyType: 0
     exp: 10
+    moveDuration: 15
+    moveType: 0
   - no: 1
     hp: 80
     power: 30
     enemySprite: {fileID: 21300000, guid: 2c805edc293be3e43840effa4b2ecc0f, type: 3}
     enemyType: 0
     exp: 20
+    moveDuration: 15
+    moveType: 1
   - no: 2
     hp: 500
     power: 50
     enemySprite: {fileID: 21300000, guid: 7f11cab40cf4bfc41934b35002c778b1, type: 3}
     enemyType: 2
     exp: 50
+    moveDuration: 0
+    moveType: 2

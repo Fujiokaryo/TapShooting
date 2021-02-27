@@ -17,5 +17,7 @@ public class EnemyDataSO : ScriptableObject
         public Sprite enemySprite;
         public EnemyType enemyType;
         public int exp;
+        public float moveDuration;
+        public MoveType moveType;
     }
 }

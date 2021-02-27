@@ -21,6 +21,8 @@ public class DefenceBase : MonoBehaviour
     {
         this.gameManager = gameManager;
 
+        durability = GameData.instance.GetDurability();
+
         maxDurability = durability;
 
         gameManager.uiManager.DisplayDurability(durability, maxDurability);
