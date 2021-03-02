@@ -22,6 +22,12 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private GameObject enemyBulletPrefab;
 
+    [SerializeField]
+    private Transform floatingDamageTran; //フロート表示を行う位置表示
+
+    [SerializeField]
+    private FloatingMessage floatingMessagePrefab;
+
     private int maxHp;
 
     private int hp;
@@ -97,6 +103,9 @@ public class EnemyController : MonoBehaviour
     /// <param name="bullet"></param>
     private void UpdateHP(Bullet bullet)
     {
+        //バレットの攻撃力値用のフロート表示の生成
+        CreateFloatingMessageToBulletPower(bullet.bulletPower);
+
         //HPを15減らす
         hp -= bullet.bulletPower;
 
@@ -122,6 +131,7 @@ public class EnemyController : MonoBehaviour
 
             //最新のTotalExpを利用して表示更新
             enemyGenerator.PreparateDisplayTotalExp(enemyData.exp);
+
 
             Destroy(gameObject);
         }
@@ -180,5 +190,18 @@ public class EnemyController : MonoBehaviour
         }
 
     }
-    
+    /// <summary>
+    /// バレットの攻撃力値分のフロート表示の生成
+    /// </summary>
+    /// <param name="bullletPower"></param>
+    private void CreateFloatingMessageToBulletPower(int bullletPower)
+    {
+        //フロート表示の生成。生成位置はEnemySetオブジェクト内のFloatingMessageTranオブジェクトの位置
+        FloatingMessage floatingMessage = Instantiate(floatingMessagePrefab, floatingDamageTran, false);
+
+        //生成下フロート表示の設定用メソッドを実行。引数としてバレットの攻撃値とフロート表示の種類を指定して渡す
+        floatingMessage.DisplayFloatingMessage(bullletPower, FloatingMessage.FloatingMessageType.EnemyDamage);
+    }
+
+
 }

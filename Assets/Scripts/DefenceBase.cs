@@ -13,6 +13,12 @@ public class DefenceBase : MonoBehaviour
     [SerializeField]
     private GameObject enemyAttackEffect;
 
+    [SerializeField]
+    private FloatingMessage floatingMessagePrefab;
+
+    [SerializeField]
+    private Transform floatingDamageTran;
+
     private Gamemanager gameManager;
 
     private int maxDurability;
@@ -21,13 +27,14 @@ public class DefenceBase : MonoBehaviour
     {
         this.gameManager = gameManager;
 
+        //ゲームデータより耐久力を取得
         durability = GameData.instance.GetDurability();
 
+        //ゲーム開始時点の耐久力の値を最大値として代入
         maxDurability = durability;
 
+        //耐久力の表示更新
         gameManager.uiManager.DisplayDurability(durability, maxDurability);
-
-        // TODO ゲージの表示を耐久力の値に合わせて更新
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -40,6 +47,7 @@ public class DefenceBase : MonoBehaviour
             //侵入してきたコライダをオフにする（重複判定の防止）
             collision.GetComponent<CapsuleCollider2D>().enabled = false;
             
+            //ダメージ値の取得
             if(collision.gameObject.TryGetComponent(out Bullet bullet))
             {
                 damage = bullet.bulletPower;
@@ -48,8 +56,14 @@ public class DefenceBase : MonoBehaviour
             {
                 damage = enemy.enemyData.power;
             }
+
+            //耐久力の更新とゲームオーバーの確認
             UpdateDurability(damage);
 
+            //エネミーからのダメージ値用のフロート表示の生成
+            CreateFloatingMessageToDamage(damage);
+
+            //エネミーの攻撃演出用のエフェクト生成
             GenerateEnemyAttackEffect(collision.gameObject.transform);
 
             Destroy(collision.gameObject);
@@ -86,5 +100,14 @@ public class DefenceBase : MonoBehaviour
         damageEffect.transform.SetParent(TransformHelper.TemporaryObjectContainerTran);
 
         Destroy(damageEffect, 1f);
+    }
+
+   private void CreateFloatingMessageToDamage(int damage)
+    {
+        //フロート表示の生成。生成位置はDefenceBaseオブジェクトないのtxtDutabilityオブジェクトの位置
+        FloatingMessage floatingMessage = Instantiate(floatingMessagePrefab, floatingDamageTran, false);
+
+        //生成したフロート表示のせっいぇい」用のメソッドを実行。引数として、エネミーからのダメージ値とフロート表示の種類を指定して渡す
+        floatingMessage.DisplayFloatingMessage(damage, FloatingMessage.FloatingMessageType.PlayerDamage);
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyGenerator : MonoBehaviour
 {
     [SerializeField]
-    private GameObject enemyObjPrefab; //エネミーのプレファブ
+    private EnemyController enemyObjPrefab; //エネミーのプレファブ
 
     [SerializeField]
     public float preparateTime; //エネミー生成までの時間
@@ -29,6 +29,9 @@ public class EnemyGenerator : MonoBehaviour
     private List<EnemyDataSO.EnemyData> bossEnemyDatas = new List<EnemyDataSO.EnemyData>();
 
     public MoveEventSO moveEventSO; //エネミー移動用のスクリプタブルオブジェクト
+
+    [SerializeField]
+    private List<EnemyController> enemiesList = new List<EnemyController>();
 
     /// <summary>
     /// EnemyGanaratorの設定
@@ -105,15 +108,17 @@ public class EnemyGenerator : MonoBehaviour
                 break;
 
         }
-
-
-       GameObject enemySetObj = Instantiate(enemyObjPrefab, transform, false);
-
-       EnemyController enemyController = enemySetObj.GetComponent<EnemyController>();
-
+       //プレファブからエネミーのクローンを生成する。生成位置はEnemyGeneratorの位置。戻り値の値はEnemyController型になる
+       EnemyController enemyController = Instantiate(enemyObjPrefab, transform, false);
+       
+       //EnemyControllerスクリプトのSetUpEnemyメソッドを実行する（Startメソッドの変わりの処理）
        enemyController.SetUpEnemy(enemyData);
        
+       //Boss以外でも追加設定を行う
        enemyController.AdditionalSetUPEnemy(this);
+
+        //Listに生成したエネミーの情報を追加
+        enemiesList.Add(enemyController);
         
     }
 
@@ -171,11 +176,40 @@ public class EnemyGenerator : MonoBehaviour
         //GameManagerスクリプトからUIManagerスクリプトのUpdateDisplayTptalExpメソッドを実行する
         gamemanager.uiManager.UpdateDisplayTotalExp(GameData.instance.GetTotalExp());
 
-        // TODO 引数のexp変数は後々利用する
+        //UIManagerスクリプトのCreateFloatingMessageToExpメソッドを実行する
+        gamemanager.uiManager.CreateFloatingMessageToExp(exp, FloatingMessage.FloatingMessageType.GetExp);
     }
-
+    /// <summary>
+    /// プレイヤーとエネミーの位置から方向を判定する準備
+    /// </summary>
+    /// <param name="enemyPos"></param>
+    /// <returns></returns>
     public Vector3 PreparateGetPlayerDirection(Vector3 enemyPos)
     {
         return gamemanager.GetPlayerDirection(enemyPos);
+    }
+    /// <summary>
+    /// enemiesListに登録されているエネミーの打ち、リストに残っているエネミーのゲームオブジェクトを破壊し、リストをクリアする
+    /// </summary>
+    public void ClearEnemiesList()
+    {
+        //enemiesListの要素（中身）を１つずつ順番に、要素の最大値になるまで判定していく
+        for(int i = 0; i < enemiesList.Count; i++)
+        {
+            //要素が空でない（プレイヤーに破壊されずにゲーム画面に残っているなら）
+            if(enemiesList[i] != null)
+            {
+                //そのエネミーのゲームオブジェクトを破壊する
+                Destroy(enemiesList[i].gameObject);
+            }
+        }
+        //リストをクリア（要素が何もない状態）にする
+        enemiesList.Clear();
+    }
+
+    public void DestroyTemporaryObjectContainer()
+    {
+        //TemporaryObjectContainerゲームオブジェクトを破壊する
+        Destroy(TransformHelper.TemporaryObjectContainerTran.gameObject);
     }
 }

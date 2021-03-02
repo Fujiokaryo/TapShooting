@@ -43,6 +43,15 @@ public class Gamemanager : MonoBehaviour
     public void SwitchGameUp(bool isSwitch)
     {
         isGameUp = isSwitch;
+
+        if(isGameUp)
+        {
+            //画面に残っているエネミーをすべて破壊する
+            enemyGenerator.ClearEnemiesList();
+
+            //一時オブジェクトを破壊する（子オブジェクトである、ボスのエネミーのバレットやエフェクト等も一緒に破壊される
+            enemyGenerator.DestroyTemporaryObjectContainer();
+        }
     }
 
     public void PreparateGameClear()

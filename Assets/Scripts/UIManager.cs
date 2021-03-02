@@ -10,6 +10,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private CanvasGroup canvasGroupGameOver;
+    [SerializeField]
+    private FloatingMessage floatingMessagePrefab;
 
     [SerializeField]
     private Text txtGameOver;
@@ -83,5 +85,14 @@ public class UIManager : MonoBehaviour
     public void UpdateDisplayTotalExp(int totalExp)
     {
         txtTotalExp.text = totalExp.ToString();
+    }
+
+    public void CreateFloatingMessageToExp(int exp, FloatingMessage.FloatingMessageType floatingMessageType)
+    {
+        //
+        FloatingMessage floatingMessage = Instantiate(floatingMessagePrefab, txtTotalExp.transform, false);
+
+        //
+        floatingMessage.DisplayFloatingMessage(exp, floatingMessageType);
     }
 }
