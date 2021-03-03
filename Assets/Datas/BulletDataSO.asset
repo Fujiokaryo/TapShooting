@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b813667857e5744f9528c4badc4ac30, type: 3}
+  m_Name: BulletDataSO
+  m_EditorClassIdentifier: 
+  bulletDataList:
+  - no: 0
+    bulletSpeed: 200
+    bulletPower: 20
+    loadingTime: 7
+    bulletType: 3
+    btnSprite: {fileID: 21300000, guid: 4acd497c071c53146b59e4b19a48f0f6, type: 3}
+    liberalType: 0
+    openExp: 0
+    launchTime: 5
+    bulletSprite: {fileID: 21300000, guid: 8134f3b45de6e5547bb26512a9977a9f, type: 3}
+    discription: "\u57FA\u672C\u30D0\u30EC\u30C3\u30C8\u306E\u4E00\u3064"
