@@ -436,3 +436,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btnBulletSelect: {fileID: 7705558741019054527}
+  imgBulletBtn: {fileID: 55760985356145866}
+  bulletData:
+    no: 0
+    bulletSpeed: 0
+    bulletPower: 0
+    loadingTime: 0
+    bulletType: 0
+    btnSprite: {fileID: 0}
+    liberalType: 0
+    openExp: 0
+    launchTime: 0
+    bulletSprite: {fileID: 0}
+    discription: 

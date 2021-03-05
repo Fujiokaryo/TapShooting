@@ -44,4 +44,6 @@ public class BulletDataSO : ScriptableObject
         public Sprite bulletSprite; //発射するバレットの画像
         public string discription; //バレットの説明文
     }
+
+
 }

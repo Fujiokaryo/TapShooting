@@ -15,6 +15,9 @@ public class GameData : MonoBehaviour
     [SerializeField]
     private int maxGenerateCountBase; //エネミーの最大生成数
 
+    [SerializeField]
+    private BulletDataSO.BulletData cullentbulletData;
+
     private void Awake()
     {
         if(instance == null)
@@ -62,5 +65,23 @@ public class GameData : MonoBehaviour
     public int GetMaxGenerateCount()
     {
         return maxGenerateCountBase;
+    }
+
+    /// <summary>
+    /// 使用するバレットのデータを設定
+    /// </summary>
+    /// <param name="bulletData"></param>
+    public void SetBulletData(BulletDataSO.BulletData bulletData)
+    {
+        cullentbulletData = bulletData;
+    }
+
+    /// <summary>
+    /// 使用しているバレットのデータを取得
+    /// </summary>
+    /// <returns></returns>
+    public BulletDataSO.BulletData GetCullentBulletData()
+    {
+        return cullentbulletData;
     }
 }

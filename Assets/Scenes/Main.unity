@@ -1172,6 +1172,18 @@ MonoBehaviour:
   totalExp: 0
   durabilityBase: 300
   maxGenerateCountBase: 5
+  cullentbulletData:
+    no: 0
+    bulletSpeed: 0
+    bulletPower: 0
+    loadingTime: 0
+    bulletType: 0
+    btnSprite: {fileID: 0}
+    liberalType: 0
+    openExp: 0
+    launchTime: 0
+    bulletSprite: {fileID: 0}
+    discription: 
 --- !u!4 &784588751
 Transform:
   m_ObjectHideFlags: 0
@@ -1490,7 +1502,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvasGroupGameClear: {fileID: 1786675632}
   canvasGroupGameOver: {fileID: 613027396}
-  floatingMessagePrefab: {fileID: 0}
+  floatingMessagePrefab: {fileID: 4388727662843791007, guid: 9e52dd6c189be2949b33b46f364436b2,
+    type: 3}
   txtGameOver: {fileID: 357142409}
   txtDurability: {fileID: 1456516363}
   slider: {fileID: 1859937498}
@@ -1629,6 +1642,7 @@ MonoBehaviour:
     type: 3}
   bulletTran: {fileID: 1424884338}
   bulletSelectDetailList: []
+  bulletDataSO: {fileID: 11400000, guid: 5f63665208869c94891aeae45d5e6a3a, type: 2}
 --- !u!4 &1091549110
 Transform:
   m_ObjectHideFlags: 0

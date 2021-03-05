@@ -20,4 +20,5 @@ public class EnemyDataSO : ScriptableObject
         public float moveDuration;
         public MoveType moveType;
     }
+
 }

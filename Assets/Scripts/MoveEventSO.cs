@@ -51,6 +51,7 @@ public class MoveEventSO : ScriptableObject
             => {
                 Sequence sequence = DOTween.Sequence();
                 sequence.Append(tran.DOLocalMoveX(tran.localPosition.x + 550, 2.5f).SetEase(Ease.Linear));
+                //sequence.Join(tran.DOLocalJump(new Vector3(tran.localPosition.x + 550, tran.localPosition.y, tran.localPosition.z), 500, 3, 2.5f).SetEase(Ease.Linear));
                 sequence.Append(tran.DOLocalMoveX(tran.localPosition.x - 550, 5.0f).SetEase(Ease.Linear));
                 sequence.Append(tran.DOLocalMoveX(tran.localPosition.x, 2.5f).SetEase(Ease.Linear));
                 sequence.AppendInterval(1.0f).SetLoops(-1, LoopType.Restart);
