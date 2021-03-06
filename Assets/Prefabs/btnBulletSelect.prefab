@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8571132002798798716
 RectTransform:
   m_ObjectHideFlags: 0
@@ -244,7 +244,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6514678004872694370
 RectTransform:
   m_ObjectHideFlags: 0
@@ -422,7 +422,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9171593142484945216}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2616269543891139943}
+        m_MethodName: OnClickBulletSelect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2616269543891139943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -437,6 +448,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btnBulletSelect: {fileID: 7705558741019054527}
   imgBulletBtn: {fileID: 55760985356145866}
+  imgLaunchTimeGauge: {fileID: 5787149902166092190}
+  txtOpenExpValue: {fileID: 7589046597784807965}
   bulletData:
     no: 0
     bulletSpeed: 0
@@ -449,3 +462,4 @@ MonoBehaviour:
     launchTime: 0
     bulletSprite: {fileID: 0}
     discription: 
+  isDefaultBullet: 0
