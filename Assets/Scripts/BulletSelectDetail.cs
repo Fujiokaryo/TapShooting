@@ -30,7 +30,7 @@ public class BulletSelectDetail : MonoBehaviour
 
     public bool isDefaultBullet; //初期バレットかどうか。初期バレットはバレットの発射時間の残り時間に関係なく発射できる
 
-    //private bool isTurnActive;
+    private bool isCostPayment; //現在コストを支払って開放済かどうか。　trueならコスト支払い完了。
 
     public void SetUpBulletSelectDetail(BulletSelectManager bulletSelectManager, BulletDataSO.BulletData bulletData)
     {
@@ -95,7 +95,11 @@ public class BulletSelectDetail : MonoBehaviour
             //コストExpを非表示
             TurnActiveOpenExpValue(false);
 
-            // TODO そのほかの設定する処理を追加
+            //選択したバレットのコストの支払いとそれに関連する処理（コストのマイナス補正はメソッド側で行う
+            bulletSelectManager.SelectedBulletCostPayment(bulletData.openExp);
+
+            //コスト支払い済状態にする = 開放条件にてEXPが足りなくても推せない状態にならないようにする
+            txtOpenExpValue.gameObject.SetActive(false);
             
         }
 
@@ -154,6 +158,12 @@ public class BulletSelectDetail : MonoBehaviour
 
         //開放に必要なExpを表示
         TurnActiveOpenExpValue(true);
+
+        //コスト未払いの状態に戻す
+        SetStateBulletCostPayment(false);
+
+        //選択可能なバレットの確認
+        bulletSelectManager.JugdeOpenBullets();
         
     }
 
@@ -162,8 +172,26 @@ public class BulletSelectDetail : MonoBehaviour
         txtOpenExpValue.gameObject.SetActive(isTurnActive);
     }
 
-    private void SwitchAcriveBulletBtn(bool isSwitch)
+    public void SwitchAcriveBulletBtn(bool isSwitch)
     {
         btnBulletSelect.interactable = isSwitch;
+    }
+
+    /// <summary>
+    /// コスト支払い状態の確認
+    /// </summary>
+    /// <returns></returns>
+    public bool GetStateBulletCostPayment()
+    {
+        return isCostPayment;
+    }
+
+    /// <summary>
+    /// コスト支払い状態の更新
+    /// </summary>
+    /// <param name="isSet"></param>
+    public void SetStateBulletCostPayment(bool isSet)
+    {
+        isCostPayment = isSet;
     }
 }

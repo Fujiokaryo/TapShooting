@@ -20,8 +20,9 @@ public class Gamemanager : MonoBehaviour
 
     public UIManager uiManager;
 
+    public BulletSelectManager bulletSelectManager;
 
-    void Start()
+    IEnumerator Start()
     {
         SwitchGameUp(false);
 
@@ -36,6 +37,10 @@ public class Gamemanager : MonoBehaviour
         uiManager.HideGameClearSet();
 
         uiManager.HideGameOverSet();
+
+        yield return StartCoroutine(bulletSelectManager.GenerateBulletSelectDetail(this));
+
+        bulletSelectManager.JugdeOpenBullets();
     }
 
     // Update is called once per frame

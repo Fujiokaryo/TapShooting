@@ -74,7 +74,7 @@ public class EnemyController : MonoBehaviour
         if(collision.gameObject.tag == "Bullet")
         {
 
-            DestroyBullet(collision);
+            //DestroyBullet(collision);
             
 
             if (collision.gameObject.TryGetComponent(out Bullet bullet))
@@ -104,10 +104,10 @@ public class EnemyController : MonoBehaviour
     private void UpdateHP(Bullet bullet)
     {
         //バレットの攻撃力値用のフロート表示の生成
-        CreateFloatingMessageToBulletPower(bullet.bulletPower);
+        CreateFloatingMessageToBulletPower(bullet.bulletData.bulletPower);
 
         //HPを15減らす
-        hp -= bullet.bulletPower;
+        hp -= bullet.bulletData.bulletPower;
 
         //HPの上下限の設定
         maxHp = Mathf.Clamp(maxHp, 0, maxHp);
@@ -134,6 +134,12 @@ public class EnemyController : MonoBehaviour
 
 
             Destroy(gameObject);
+        }
+
+        //
+        if(bullet.bulletData.bulletType == BulletDataSO.BulletType.Player_Normal || bullet.bulletData.bulletType == BulletDataSO.BulletType.Player_5ways_Normal)
+        {
+            Destroy(bullet.gameObject);
         }
     }
 

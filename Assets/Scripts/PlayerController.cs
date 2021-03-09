@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
 
     [SerializeField]
-    private GameObject bulletPrefab;
+    private Bullet bulletPrefab;
 
     private Gamemanager gamemanager;
 
@@ -38,7 +38,44 @@ public class PlayerController : MonoBehaviour
             direction = direction.normalized;
            
             //バレット生成
-            GenerateBullet(direction);        
+            PreparateGenerateBullet(direction);        
+        }
+    }
+
+    private void PreparateGenerateBullet(Vector3 direction)
+    {
+        //現在使用しているバレットの情報を取得
+        BulletDataSO.BulletData bulletData = GameData.instance.GetCullentBulletData();
+
+        //バレットの種類(BulletType)を元に決定
+        switch(bulletData.bulletType)
+        {
+            //BulletTypeがPlayer_NormalまたはPlayer_Blazeの場合（処理が同じ場合にはこのように記述できる
+            case BulletDataSO.BulletType.Player_Normal:
+            case BulletDataSO.BulletType.Player_Blaze:
+
+                GenerateBullet(direction, bulletData);
+                break;
+
+            //BulletTypeがPlayer_3ways_Piercingの場合
+            case BulletDataSO.BulletType.Player_3ways_Piercing:
+
+                for(int i = -1; i < 2; i++)
+                {
+                    //3方向に扇状に発射する
+                    GenerateBullet(new Vector3(direction.x + (0.5f * i), direction.y, direction.z), bulletData);
+                }
+                break;
+
+            //BulletTypeがPlayer_5ways_Normalの場合
+            case BulletDataSO.BulletType.Player_5ways_Normal:
+
+                for(int i = -2; i < 3; i++)
+                {
+                    //5方向に扇状に発射する
+                    GenerateBullet(new Vector3(direction.x + (0.25f + i), direction.y, direction.z), bulletData);
+                }
+                break;
         }
     }
 
@@ -46,13 +83,11 @@ public class PlayerController : MonoBehaviour
     /// バレットの生成
     /// </summary>
     /// <param name="direction"></param>
-    private void GenerateBullet(Vector3 direction)
+    private void GenerateBullet(Vector3 direction, BulletDataSO.BulletData bulletData)
     {
-        //bulletPrefabのクローンを生成、生成位置はPlayerSetオブジェクトの子オブジェクトを指定
-        GameObject bulletObj =  Instantiate(bulletPrefab, transform);
-
-        //
-        bulletObj.GetComponent<Bullet>().ShotBullet(direction, GameData.instance.GetCullentBulletData());
+        //Bulletスクリプトにてバレットを生成し、ShotBulletメソッドを実行する
+        Instantiate(bulletPrefab, transform).ShotBullet(direction, bulletData);
+ 
     }
 
     public void SetUpPlayer(Gamemanager gamemanager)

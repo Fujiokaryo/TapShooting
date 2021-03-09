@@ -17,15 +17,18 @@ public class BulletSelectManager : MonoBehaviour
     [SerializeField]
     private BulletDataSO bulletDataSO;
 
-    private void Start()
-    {
-        //バレット選択ボタンの生成
-        StartCoroutine(GenerateSelectDetail());
-    }
+    private Gamemanager gamemanager;
 
-    public IEnumerator GenerateSelectDetail()
+    /// <summary>
+    /// バレット選択ボタンの生成
+    /// </summary>
+    /// <param name="gamemanager"></param>
+    /// <returns></returns>
+    public IEnumerator GenerateBulletSelectDetail(Gamemanager gamemanager)
     {
-        for(int i = 0; i < maxBulletBtnNum; i++)
+        this.gamemanager = gamemanager;
+
+        for (int i = 0; i < maxBulletBtnNum; i++)
         {
             //バレットボタン生成
             BulletSelectDetail bulletSelectDetail = Instantiate(bulletSelectDetailPrefab, bulletTran, false);
@@ -68,6 +71,9 @@ public class BulletSelectManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 初期バレットを装填中のバレットとして設定
+    /// </summary>
     public void ActivateDefaultBullet()
     {
         //バレット選択ボタンのListから要素を一つずつ取り出す
@@ -84,5 +90,68 @@ public class BulletSelectManager : MonoBehaviour
                 return;
             }
         }
+    }
+
+    public void JugdeOpenBullets()
+    {
+        //繰り返し利用する情報を変数にしておく
+        int totalExp = GameData.instance.GetTotalExp();
+
+        //バレット毎に使用可能なEXPを超えているか確認
+        foreach(BulletSelectDetail bulletData in bulletSelectDetailList)
+        {
+            //ゲーム終了の状態になったら
+            if(gamemanager.isGameUp)
+            {
+                //バレット選択ボタンを非活性化の状態にしてタップできない状態にする
+                bulletData.SwitchAcriveBulletBtn(false);
+
+                continue;
+            }
+
+            //
+            if(bulletData.GetStateBulletCostPayment())
+            {
+                //
+                bulletData.SwitchAcriveBulletBtn(true);
+
+                continue;
+            }
+
+            //Expの現在値がバレットに設定されているコストの値以上であれば
+            if (bulletData.bulletData.openExp <= totalExp)
+            {
+                //そのバレット選択ボタンを活性化の状態にしてタップできるようにする
+                bulletData.SwitchAcriveBulletBtn(true);
+            }
+            else
+            {
+                //Expの現在値が超えていないバレット選択ボタンを非活性化状態にしてタップできなくする
+                bulletData.SwitchAcriveBulletBtn(false);
+            }
+        }
+
+     
+       
+    }
+
+    /// <summary>
+    /// 選択したバレットのコストの支払いとそれに関連する処理
+    /// </summary>
+    /// <param name="costExp"></param>
+    public void SelectedBulletCostPayment(int costExp)
+    {
+        //TotalExp（Expの現在値)より、選択したバレットのコストを減算
+        GameData.instance.UpDateTotalExp(-costExp);
+
+        //画面のExpの表示減算後の値に更新
+        gamemanager.uiManager.UpdateDisplayTotalExp(GameData.instance.GetTotalExp());
+
+        //コストの値のフロート表示を生成
+        gamemanager.uiManager.CreateFloatingMessageToExp(-costExp, FloatingMessage.FloatingMessageType.BulletCost);
+
+        //使用可能バレットの確認と更新
+        JugdeOpenBullets();
+
     }
 }

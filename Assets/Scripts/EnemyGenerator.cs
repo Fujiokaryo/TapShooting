@@ -142,6 +142,7 @@ public class EnemyGenerator : MonoBehaviour
 
         gamemanager.PreparateGameClear();
     }
+
     /// <summary>
     /// 引数で指定されたエネミーの種類のListを作成し、作成した値を戻り値で返す
     /// </summary>
@@ -178,7 +179,11 @@ public class EnemyGenerator : MonoBehaviour
 
         //UIManagerスクリプトのCreateFloatingMessageToExpメソッドを実行する
         gamemanager.uiManager.CreateFloatingMessageToExp(exp, FloatingMessage.FloatingMessageType.GetExp);
+
+        //使用可能バレット選択ボタンの確認と更新
+        gamemanager.bulletSelectManager.JugdeOpenBullets();
     }
+
     /// <summary>
     /// プレイヤーとエネミーの位置から方向を判定する準備
     /// </summary>
@@ -188,6 +193,7 @@ public class EnemyGenerator : MonoBehaviour
     {
         return gamemanager.GetPlayerDirection(enemyPos);
     }
+
     /// <summary>
     /// enemiesListに登録されているエネミーの打ち、リストに残っているエネミーのゲームオブジェクトを破壊し、リストをクリアする
     /// </summary>
