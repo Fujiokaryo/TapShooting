@@ -8,6 +8,9 @@ public class BulletDataSO : ScriptableObject
 {
     public List<BulletData> bulletDataList = new List<BulletData>();
 
+    /// <summary>
+    /// バレットの種類
+    /// </summary>
     [Serializable]
     public enum BulletType
     {

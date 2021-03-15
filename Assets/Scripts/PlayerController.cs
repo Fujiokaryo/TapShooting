@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// プレイヤーを制御するクラス
+/// </summary>
 public class PlayerController : MonoBehaviour
 {
 
@@ -82,7 +85,8 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// バレットの生成
     /// </summary>
-    /// <param name="direction"></param>
+    /// <param name="direction">弾の方向</param>
+    /// <param name="bulletData">弾の振る舞い</param>
     private void GenerateBullet(Vector3 direction, BulletDataSO.BulletData bulletData)
     {
         //Bulletスクリプトにてバレットを生成し、ShotBulletメソッドを実行する

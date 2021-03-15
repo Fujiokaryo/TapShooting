@@ -20,10 +20,16 @@ public class Bullet : MonoBehaviour
 
     /// <summary>
     /// バレットの制御
+    /// EnemyController
+    /// PlayerController
     /// </summary>
     /// <param name="direction"></param>
+    /// <param name="bulletData"></param>
     public void ShotBullet(Vector3 direction, BulletDataSO.BulletData bulletData = null)
     {
+
+       
+
         //引数よりバレットの情報を取得し、どのようなバレットであるのか振る舞いを決定
         this.bulletData = bulletData;
 
@@ -76,7 +82,8 @@ public class Bullet : MonoBehaviour
         }
 
         //バレットの移動処理
-        GetComponent<Rigidbody2D>().AddForce(direction * this.bulletData.bulletSpeed);
+        //GetComponent<Rigidbody2D>().AddForce(direction * this.bulletData.bulletSpeed);
+
         //5秒後にバレットを破壊する
         Destroy(gameObject, 5f);
     }

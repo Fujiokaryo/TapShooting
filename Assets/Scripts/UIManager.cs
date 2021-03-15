@@ -25,6 +25,18 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text txtTotalExp;
 
+    [SerializeField]
+    private Image imgGameClear;
+
+    [SerializeField]
+    private CanvasGroup canvasGroupRestartImage;
+
+    [SerializeField]
+    private CanvasGroup canvasGroupOpeningFilter;
+
+    [SerializeField]
+    private Image imgGameStart;
+
     /// <summary>
     /// ゲームクリア表示を見えなくする
     /// </summary>
@@ -40,7 +52,30 @@ public class UIManager : MonoBehaviour
     public void DisplayGameClaerSet()
     {
         //GameClaerSetの透明度を徐々に１にしてゲームクリア表示
-        canvasGroupGameClear.DOFade(1.0f, 0.25f);
+        canvasGroupGameClear.DOFade(1.0f, 0.25f)
+            .OnComplete(() =>
+            {
+
+                //ゲームクリアの画像をDOPunchScaleメソッドで伸縮させる
+                imgGameClear.transform.DOPunchScale(Vector3.one * 2.5f, 0.5f)
+
+                //DOPunchScaleメソッドの処理が終了したら
+                .OnComplete(() =>
+                {
+                    //ゲームクリアの画像をDOShakeScaleメソッドで揺らす
+                    imgGameClear.transform.DOShakeScale(0.5f);
+
+                    //ゲームクリアの画像のサイズを1.5倍にする
+                    imgGameClear.transform.localScale = Vector3.one * 1.5f;
+
+                    //画像タップを許可
+                    canvasGroupGameClear.blocksRaycasts = true;
+
+                    //Restartの点滅表示
+                    canvasGroupRestartImage.DOFade(1.0f, 1.5f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
+                });
+
+            });
     }
 
     /// <summary>
@@ -89,10 +124,29 @@ public class UIManager : MonoBehaviour
 
     public void CreateFloatingMessageToExp(int exp, FloatingMessage.FloatingMessageType floatingMessageType)
     {
-        //
+        //フロート表示の生成。　生成位置はtxtTotalExpの位置
         FloatingMessage floatingMessage = Instantiate(floatingMessagePrefab, txtTotalExp.transform, false);
 
-        //
+        //生成したフロート表示の設定用メソッドを実行。引数としてExp値とフロート表示の種類を指定して渡す
         floatingMessage.DisplayFloatingMessage(exp, floatingMessageType);
+    }
+
+    public IEnumerator PlayOpening()
+    {
+        //黒いフィルター画像を序所に非表示にして、ゲーム画面を見えるようにする
+        canvasGroupOpeningFilter.DOFade(0.0f, 1.0f)
+
+            //上記の処理が終了したら
+            .OnComplete(() =>
+            {
+                //ゲームスタートのロゴ画像を跳ねさせながら、画面外の左端からゲーム画面の中央へ移動
+                imgGameStart.transform.DOLocalJump(Vector3.zero, 300f, 3, 1.5f).SetEase(Ease.Linear);
+            });
+
+        //一時処理を中断（ゲームスタートのロゴが画面の中央で停止したままになる）
+        yield return new WaitForSeconds(3.5f);
+
+        //ゲームスタートのロゴ画像を跳ねさせながら、ゲーム画面の中央から画面の右端へ移動して画面外に
+        imgGameStart.transform.DOLocalJump(new Vector3(1500, 0, 0), 200f, 3, 1.5f).SetEase(Ease.Linear);
     }
 }

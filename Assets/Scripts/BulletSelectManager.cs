@@ -45,6 +45,8 @@ public class BulletSelectManager : MonoBehaviour
 
         // TODO 使用するバレットの情報を初期設定。後ほど、引数を変更する
         GameData.instance.SetBulletData(bulletDataSO.bulletDataList[0]);
+
+       
     }
 
     public void ChangeLoadingBulletSettings(int bulletNo)
@@ -79,6 +81,8 @@ public class BulletSelectManager : MonoBehaviour
         //バレット選択ボタンのListから要素を一つずつ取り出す
         foreach(BulletSelectDetail bulletSelectDetail in bulletSelectDetailList)
         {
+            
+
             //初期バレットの設定があるバレットデータの場合
             if(bulletSelectDetail.isDefaultBullet)
             {
@@ -100,8 +104,9 @@ public class BulletSelectManager : MonoBehaviour
         //バレット毎に使用可能なEXPを超えているか確認
         foreach(BulletSelectDetail bulletData in bulletSelectDetailList)
         {
+            //Debug.Log(bulletData.bulletData.no);
             //ゲーム終了の状態になったら
-            if(gamemanager.isGameUp)
+            if (gamemanager.isGameUp)
             {
                 //バレット選択ボタンを非活性化の状態にしてタップできない状態にする
                 bulletData.SwitchAcriveBulletBtn(false);

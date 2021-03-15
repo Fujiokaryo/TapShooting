@@ -54,6 +54,11 @@ public class EnemyGenerator : MonoBehaviour
             return;
         }
 
+        if(!gamemanager.isSetUpEnd)
+        {
+            return;
+        }
+
         if(!gamemanager.isGameUp)
         {           
                 PreparateGenerateEnemy();
