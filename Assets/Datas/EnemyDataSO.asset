@@ -21,6 +21,8 @@ MonoBehaviour:
     exp: 10
     moveDuration: 15
     moveType: 0
+    elementType: 4
+    bulletType: 1
   - no: 1
     hp: 80
     power: 30
@@ -29,6 +31,8 @@ MonoBehaviour:
     exp: 20
     moveDuration: 15
     moveType: 1
+    elementType: 3
+    bulletType: 7
   - no: 2
     hp: 500
     power: 50
@@ -37,3 +41,5 @@ MonoBehaviour:
     exp: 50
     moveDuration: 0
     moveType: 2
+    elementType: 0
+    bulletType: 0

@@ -24,6 +24,7 @@ MonoBehaviour:
     launchTime: 5
     bulletSprite: {fileID: 21300000, guid: 8134f3b45de6e5547bb26512a9977a9f, type: 3}
     discription: "\u57FA\u672C\u30D0\u30EC\u30C3\u30C8\u306E\u4E00\u3064"
+    elementType: 4
   - no: 1
     bulletSpeed: 100
     bulletPower: 15
@@ -34,7 +35,8 @@ MonoBehaviour:
     openExp: 20
     launchTime: 5
     bulletSprite: {fileID: 21300000, guid: cee04a187d015c348a5ab07d170b3d9d, type: 3}
-    discription: "\u57FA\u672C\u30D0\u30EC\u30C3\u30C8\u306E\u4E00\u3064"
+    discription: "\u8FFD\u5C3E\u5F3E\u3001\u7740\u5F3E\u5F8C\u4E00\u5B9A\u6642\u9593\u305D\u306E\u5834\u306B\u6B8B\u308B"
+    elementType: 1
   - no: 2
     bulletSpeed: 300
     bulletPower: 15
@@ -45,7 +47,8 @@ MonoBehaviour:
     openExp: 50
     launchTime: 5
     bulletSprite: {fileID: 21300000, guid: 9628faacc21bdd34c939bba7bb47f4d2, type: 3}
-    discription: "\u57FA\u672C\u30D0\u30EC\u30C3\u30C8\u306E\u4E00\u3064"
+    discription: "\u6247\u72B63\u65B9\u5411\u306B\u767A\u5C04\u3055\u308C\u308B"
+    elementType: 3
   - no: 3
     bulletSpeed: 150
     bulletPower: 20
@@ -56,4 +59,5 @@ MonoBehaviour:
     openExp: 100
     launchTime: 5
     bulletSprite: {fileID: 21300000, guid: 956a1e5b897778f41b50a4c00623bb11, type: 3}
-    discription: "\u57FA\u672C\u30D0\u30EC\u30C3\u30C8\u306E\u4E00\u3064"
+    discription: "\u6247\u72B65\u65B9\u5411\u306B\u767A\u5C04\u3055\u308C\u308B"
+    elementType: 2

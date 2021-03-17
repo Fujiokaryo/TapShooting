@@ -19,6 +19,8 @@ public class EnemyDataSO : ScriptableObject
         public int exp;
         public float moveDuration;
         public MoveType moveType;
+        public ElementType elementType;
+        public BulletDataSO.BulletType bulletType;
     }
 
 }

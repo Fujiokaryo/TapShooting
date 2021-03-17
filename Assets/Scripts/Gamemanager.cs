@@ -48,6 +48,8 @@ public class Gamemanager : MonoBehaviour
 
         uiManager.HideGameOverSet();
 
+        uiManager.HideBossAlertSet();
+
         yield return StartCoroutine(bulletSelectManager.GenerateBulletSelectDetail(this));
 
         yield return StartCoroutine(uiManager.PlayOpening());

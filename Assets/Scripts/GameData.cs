@@ -18,6 +18,9 @@ public class GameData : MonoBehaviour
     [SerializeField]
     private BulletDataSO.BulletData cullentbulletData;
 
+    [SerializeField]
+    private float damageRatio; //属性間の愛称によるダメージ倍率
+
     private void Awake()
     {
         if(instance == null)
@@ -84,4 +87,18 @@ public class GameData : MonoBehaviour
     {
         return cullentbulletData;
     }
+
+    public float DamageRatio
+    { 
+       set
+        {
+            damageRatio = value;
+        }
+
+        get
+        {
+            return damageRatio;
+        }
+    }
+
 }

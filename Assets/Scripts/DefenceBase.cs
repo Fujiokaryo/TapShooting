@@ -50,11 +50,15 @@ public class DefenceBase : MonoBehaviour
             //ダメージ値の取得
             if(collision.gameObject.TryGetComponent(out Bullet bullet))
             {
-                damage = bullet.bulletPower;
+                damage = JudgeDamageToElementType(bullet.bulletData.bulletPower, bullet.bulletData.elementType);
+
+                Debug.Log("バレットの攻撃力 :" + bullet.bulletData.bulletPower);
             }
             else if(collision.gameObject.TryGetComponent(out EnemyController enemy))
             {
-                damage = enemy.enemyData.power;
+                damage = JudgeDamageToElementType(enemy.enemyData.power, enemy.enemyData.elementType);
+
+                Debug.Log("エネミーの攻撃力 :" + enemy.enemyData.power);
             }
 
             //耐久力の更新とゲームオーバーの確認
@@ -109,5 +113,29 @@ public class DefenceBase : MonoBehaviour
 
         //生成したフロート表示のせっいぇい」用のメソッドを実行。引数として、エネミーからのダメージ値とフロート表示の種類を指定して渡す
         floatingMessage.DisplayFloatingMessage(damage, FloatingMessage.FloatingMessageType.PlayerDamage);
+    }
+
+    /// <summary>
+    /// ElementTypeの相性判定を行ってダメージの最終値と弱点かどうかを判定
+    /// </summary>
+    /// <param name="attackPower"></param>
+    /// <param name="attackElementType"></param>
+    /// <returns></returns>
+    private int JudgeDamageToElementType(int attackPower, ElementType attackElementType)
+    {
+        //最終的なダメージ値を準備する。初期値として、現在のダメージ値を代入
+        int lastDamage = attackPower;
+
+        //エネミー側の本体やバレットを攻撃者とし、属性値の相性を判定
+        if(ElementCompatibilityHelper.GetElementCompatibility(attackElementType, GameData.instance.GetCullentBulletData().elementType))
+        {
+            //エネミーの攻撃属性がプレイヤー側の弱点であるなら、ダメージ値に倍率をかける
+            lastDamage = Mathf.FloorToInt(attackPower * GameData.instance.DamageRatio);
+
+            Debug.Log("弱点");
+        }
+
+        //計算後のダメージ値を戻す
+        return lastDamage;
     }
 }

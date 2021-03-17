@@ -129,11 +129,11 @@ public class EnemyGenerator : MonoBehaviour
 
     private IEnumerator GenerateBoss()
     {
-        // TODO ボス出現の警告演出
+        //ボス出現の警告演出
+        yield return StartCoroutine(gamemanager.uiManager.PlayBossAlert());
 
-        yield return new WaitForSeconds(1.0f);
 
-        // TODO ボス生成
+        //ボス生成
         GenerateEnemy(EnemyType.Boss);
 
 

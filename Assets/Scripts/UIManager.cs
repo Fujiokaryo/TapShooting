@@ -37,6 +37,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Image imgGameStart;
 
+    [SerializeField]
+    private CanvasGroup canvasGroupBossAlert;
+
     /// <summary>
     /// ゲームクリア表示を見えなくする
     /// </summary>
@@ -148,5 +151,20 @@ public class UIManager : MonoBehaviour
 
         //ゲームスタートのロゴ画像を跳ねさせながら、ゲーム画面の中央から画面の右端へ移動して画面外に
         imgGameStart.transform.DOLocalJump(new Vector3(1500, 0, 0), 200f, 3, 1.5f).SetEase(Ease.Linear);
+    }
+
+    public void HideBossAlertSet()
+    {
+        canvasGroupBossAlert.transform.parent.gameObject.SetActive(false);
+    }
+
+    public IEnumerator PlayBossAlert()
+    {
+        canvasGroupBossAlert.transform.parent.gameObject.SetActive(true);
+        canvasGroupBossAlert.DOFade(1.0f, 0.5f).SetLoops(6, LoopType.Yoyo);
+        yield return new WaitForSeconds(3f);
+        canvasGroupBossAlert.DOFade(0f, 0.25f);
+        yield return new WaitForSeconds(0.25f);
+        canvasGroupBossAlert.transform.parent.gameObject.SetActive(false);
     }
 }

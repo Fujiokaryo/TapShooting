@@ -103,11 +103,30 @@ public class EnemyController : MonoBehaviour
     /// <param name="bullet"></param>
     private void UpdateHP(Bullet bullet)
     {
-        //バレットの攻撃力値用のフロート表示の生成
-        CreateFloatingMessageToBulletPower(bullet.bulletData.bulletPower);
+        //ダメージ確定用
+        int bulletPower = 0;
 
-        //HPを15減らす
-        hp -= bullet.bulletData.bulletPower;
+        //バレットの属性とエネミーの属性の情報を利用して相性を判定
+        if(ElementCompatibilityHelper.GetElementCompatibility(bullet.bulletData.elementType, enemyData.elementType) == true)
+        {
+            Debug.Log("Element　相性　良");
+
+            //バレットの攻撃力をダメージ倍率分掛けた値にして、計算結果を切り上げてint型にする
+            bulletPower = Mathf.FloorToInt(bullet.bulletData.bulletPower * GameData.instance.DamageRatio);
+        }
+        else
+        {
+            //バレットの攻撃力をそのまま利用する
+            bulletPower = bullet.bulletData.bulletPower;
+        }
+
+
+
+        //バレットの攻撃力値用のフロート表示の生成
+        CreateFloatingMessageToBulletPower(bulletPower);
+
+        //hpの減算処理
+        hp -= bulletPower;
 
         //HPの上下限の設定
         maxHp = Mathf.Clamp(maxHp, 0, maxHp);
