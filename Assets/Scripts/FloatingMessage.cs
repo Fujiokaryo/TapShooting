@@ -9,6 +9,9 @@ public class FloatingMessage : MonoBehaviour
     [SerializeField]
     private Text txtFloatingMesssage;
 
+    /// <summary>
+    /// フロート表示の種類
+    /// </summary>
     public enum FloatingMessageType
     {
         EnemyDamage, //エネミー被ダメージ
@@ -22,7 +25,7 @@ public class FloatingMessage : MonoBehaviour
     /// </summary>
     /// <param name="floatingValue"></param>
     /// <param name="floatingMessageType"></param>
-    public void DisplayFloatingMessage(int floatingValue, FloatingMessageType floatingMessageType)
+    public void DisplayFloatingMessage(int floatingValue, FloatingMessageType floatingMessageType, bool isWeekness = false)
     {
         //フロート表示の位置を毎回同じ位置にしないようにランダム要素を加える
         transform.localPosition = new Vector3(transform.localPosition.x + Random.Range(-20, 20), transform.localPosition.y + Random.Range(-10, 10), 0);
@@ -32,6 +35,13 @@ public class FloatingMessage : MonoBehaviour
 
         //フロート表示の数字の色を指定
         txtFloatingMesssage.color = GetMessageColor(floatingMessageType);
+
+        //弱点属性の場合
+        if(isWeekness)
+        {
+            //フロート表示の数字を大きくする
+            transform.localScale = Vector3.one * 2.0f;
+        }
 
         //フロート表示を上方向に移動させて、移動し終わったら破壊
         transform.DOLocalMoveY(transform.localPosition.y + 50, 1.0f).OnComplete(() => { Destroy(gameObject); });

@@ -13,10 +13,7 @@ public class PlayerController : MonoBehaviour
 
     private Gamemanager gamemanager;
 
-    void Start()
-    {
-        
-    }
+
 
     // Update is called once per frame
     void Update()
@@ -91,6 +88,7 @@ public class PlayerController : MonoBehaviour
     {
         //Bulletスクリプトにてバレットを生成し、ShotBulletメソッドを実行する
         Instantiate(bulletPrefab, transform).ShotBullet(direction, bulletData);
+        SoundManager.instance.PlayVoice(SoundDataSO.VoiceType.Attack);
  
     }
 

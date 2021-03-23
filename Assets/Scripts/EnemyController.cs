@@ -46,6 +46,7 @@ public class EnemyController : MonoBehaviour
 
         if(this.enemyData.enemyType != EnemyType.Boss)
         {
+            //エネミーのX軸の位置を、ゲーム画面に収まる葉にｄふぇランダムな位置に変更
             transform.localPosition = new Vector3(transform.localPosition.x + Random.Range(-650, 650), transform.localPosition.y, 0);
         }
         else
@@ -57,6 +58,7 @@ public class EnemyController : MonoBehaviour
             slider.transform.localPosition = new Vector3(0, 150, 0);
 
         }
+
         //画像をEnemyDataの画像にする
         imgEnemy.sprite = this.enemyData.enemySprite;
 
@@ -73,13 +75,12 @@ public class EnemyController : MonoBehaviour
     {
         if(collision.gameObject.tag == "Bullet")
         {
-
-            //DestroyBullet(collision);
             
-
             if (collision.gameObject.TryGetComponent(out Bullet bullet))
             {
                 UpdateHP(bullet);
+
+                SoundManager.instance.PlaySE(SoundDataSO.SeType.BulletDamage_1);
 
                 GenerateBulletEffect(collision.gameObject.transform);
             }
@@ -106,6 +107,9 @@ public class EnemyController : MonoBehaviour
         //ダメージ確定用
         int bulletPower = 0;
 
+        //弱点判定用。弱点ｎの場合には、trueに切り替える
+        bool isWeekness = false;
+
         //バレットの属性とエネミーの属性の情報を利用して相性を判定
         if(ElementCompatibilityHelper.GetElementCompatibility(bullet.bulletData.elementType, enemyData.elementType) == true)
         {
@@ -113,6 +117,8 @@ public class EnemyController : MonoBehaviour
 
             //バレットの攻撃力をダメージ倍率分掛けた値にして、計算結果を切り上げてint型にする
             bulletPower = Mathf.FloorToInt(bullet.bulletData.bulletPower * GameData.instance.DamageRatio);
+
+            isWeekness = true;
         }
         else
         {
@@ -123,7 +129,7 @@ public class EnemyController : MonoBehaviour
 
 
         //バレットの攻撃力値用のフロート表示の生成
-        CreateFloatingMessageToBulletPower(bulletPower);
+        CreateFloatingMessageToBulletPower(bulletPower, isWeekness);
 
         //hpの減算処理
         hp -= bulletPower;
@@ -143,6 +149,9 @@ public class EnemyController : MonoBehaviour
             {
                 //ボス討伐済みのフラグをたてる
                 enemyGenerator.SwitchBossDestroyed(true);
+
+                SoundManager.instance.PlaySE(SoundDataSO.SeType.GameClear);
+                SoundManager.instance.PlayVoice(SoundDataSO.VoiceType.Win);
             }
 
             //ExpをTotaExpに加算
@@ -155,28 +164,42 @@ public class EnemyController : MonoBehaviour
             Destroy(gameObject);
         }
 
-        //
+        //ノーマル弾の場合
         if(bullet.bulletData.bulletType == BulletDataSO.BulletType.Player_Normal || bullet.bulletData.bulletType == BulletDataSO.BulletType.Player_5ways_Normal)
         {
             Destroy(bullet.gameObject);
         }
     }
 
+    /// <summary>
+    ///Hpゲージの表示更新 
+    /// </summary>
     private void DisplayHpGauge()
     {
         slider.DOValue((float)hp / maxHp, 0.25f);
     }
 
+    /// <summary>
+    /// 被弾時のヒット演出用のエフェクト作成
+    /// </summary>
+    /// <param name="bulletTran"></param>
     private void GenerateBulletEffect(Transform bulletTran)
     {
+        //ヒット演出用のエフェクトをバレットのぶつかった位置で作成
         GameObject effect = Instantiate(bulletEffect, bulletTran, false);
 
+        //エフェクトをエネミーの子オブジェクトにする
         effect.transform.SetParent(transform);
 
         Destroy(effect, 3f);
     }
 
-    public void AdditionalSetUPEnemy(EnemyGenerator enemyGenerator)
+    /// <summary>
+    /// エネミーの追加設定
+    /// </summary>
+    /// <param name="enemyGenerator"></param>
+    /// <param name="bulletData"></param>
+    public void AdditionalSetUPEnemy(EnemyGenerator enemyGenerator, BulletDataSO.BulletData bulletData)
     {
         //引数で届いた情報を変数に代入してスクリプト内で利用可能にする
         this.enemyGenerator = enemyGenerator;
@@ -186,24 +209,29 @@ public class EnemyController : MonoBehaviour
 
         moveEvent.Invoke(transform, enemyData.moveDuration);
 
-        Debug.Log("追加設定完了");
 
-        if(enemyData.moveType == MoveType.Straight || enemyData.moveType == MoveType.Boss_Horizontal)
+        if(bulletData != null && bulletData.bulletType != BulletDataSO.BulletType.None)
         {
-            StartCoroutine(EnemyShot());
+            StartCoroutine(EnemyShot(bulletData));
         }
 
     }
 
-    private IEnumerator EnemyShot()
+    /// <summary>
+    /// バレットの自動生成
+    /// </summary>
+    /// <param name="bulletData"></param>
+    /// <returns></returns>
+    private IEnumerator EnemyShot(BulletDataSO.BulletData bulletData)
     {
         while(true)
         {
-            //エネミーのバレットのクローンを生成し、戻り値をbulletObjに代入
+           //エネミーのバレットのクローンを生成し、戻り値をbulletObjに代入
            GameObject bulletObj = Instantiate(enemyBulletPrefab, transform);
 
-            //クローンのゲームオブジェクトからBulletスクリプトを取得してShotBulletメソッドを実行する
-            bulletObj.GetComponent<Bullet>().ShotBullet(enemyGenerator.PreparateGetPlayerDirection(transform.position));
+           //クローンのゲームオブジェクトからBulletスクリプトを取得してShotBulletメソッドを実行する
+           bulletObj.GetComponent<Bullet>().ShotBullet(enemyGenerator.PreparateGetPlayerDirection(transform.position), bulletData);
+
 
             if(enemyData.moveType == MoveType.Boss_Horizontal)
             {
@@ -211,7 +239,7 @@ public class EnemyController : MonoBehaviour
                 bulletObj.transform.SetParent(TransformHelper.GetTemporaryObjectContainerTran());
             }
 
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(bulletData.loadingTime);
         }
 
     }
@@ -219,13 +247,13 @@ public class EnemyController : MonoBehaviour
     /// バレットの攻撃力値分のフロート表示の生成
     /// </summary>
     /// <param name="bullletPower"></param>
-    private void CreateFloatingMessageToBulletPower(int bullletPower)
+    private void CreateFloatingMessageToBulletPower(int bullletPower, bool isWeekness)
     {
         //フロート表示の生成。生成位置はEnemySetオブジェクト内のFloatingMessageTranオブジェクトの位置
         FloatingMessage floatingMessage = Instantiate(floatingMessagePrefab, floatingDamageTran, false);
 
         //生成下フロート表示の設定用メソッドを実行。引数としてバレットの攻撃値とフロート表示の種類を指定して渡す
-        floatingMessage.DisplayFloatingMessage(bullletPower, FloatingMessage.FloatingMessageType.EnemyDamage);
+        floatingMessage.DisplayFloatingMessage(bullletPower, FloatingMessage.FloatingMessageType.EnemyDamage, isWeekness);
     }
 
 

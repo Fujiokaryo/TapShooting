@@ -46,7 +46,6 @@ public class BulletDataSO : ScriptableObject
         public float launchTime; //バレットを使用できる時間
         public Sprite bulletSprite; //発射するバレットの画像
         public string discription; //バレットの説明文
-
         public ElementType elementType;
     }
 

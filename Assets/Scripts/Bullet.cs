@@ -27,9 +27,6 @@ public class Bullet : MonoBehaviour
     /// <param name="bulletData"></param>
     public void ShotBullet(Vector3 direction, BulletDataSO.BulletData bulletData = null)
     {
-
-       
-
         //引数よりバレットの情報を取得し、どのようなバレットであるのか振る舞いを決定
         this.bulletData = bulletData;
 
@@ -44,7 +41,7 @@ public class Bullet : MonoBehaviour
         imgBullet.sprite = this.bulletData.bulletSprite;
 
         //追尾玉のみ処理する
-        if(bulletData.bulletType == BulletDataSO.BulletType.Player_Blaze)
+        if (bulletData.bulletType == BulletDataSO.BulletType.Player_Blaze)
         {
             //発射時にゲーム内にいるエネミーの情報を取得
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -80,9 +77,6 @@ public class Bullet : MonoBehaviour
             //バレットのゲームオブジェクトにアタッチされているRigidbody2Dを取得してAddForceメソッドを実行する
             GetComponent<Rigidbody2D>().AddForce(direction * this.bulletData.bulletSpeed);
         }
-
-        //バレットの移動処理
-        //GetComponent<Rigidbody2D>().AddForce(direction * this.bulletData.bulletSpeed);
 
         //5秒後にバレットを破壊する
         Destroy(gameObject, 5f);

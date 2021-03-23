@@ -19,7 +19,7 @@ public class GameData : MonoBehaviour
     private BulletDataSO.BulletData cullentbulletData;
 
     [SerializeField]
-    private float damageRatio; //属性間の愛称によるダメージ倍率
+    private float damageRatio; //属性間の相性によるダメージ倍率
 
     private void Awake()
     {

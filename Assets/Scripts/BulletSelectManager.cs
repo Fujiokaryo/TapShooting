@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class BulletSelectManager : MonoBehaviour
 {
@@ -17,10 +18,14 @@ public class BulletSelectManager : MonoBehaviour
     [SerializeField]
     private BulletDataSO bulletDataSO;
 
+    [SerializeField]
+    private ElementDataSO elementDataSO;
+
     private Gamemanager gamemanager;
 
     /// <summary>
     /// バレット選択ボタンの生成
+    /// [GameManager、Startメソッド]
     /// </summary>
     /// <param name="gamemanager"></param>
     /// <returns></returns>
@@ -28,13 +33,19 @@ public class BulletSelectManager : MonoBehaviour
     {
         this.gamemanager = gamemanager;
 
+        //BulletDataSOのデータから利用者の種類がPlayerのバレットの情報だけを代入するListを用意する
+        List<BulletDataSO.BulletData> playerBulletDatas = new List<BulletDataSO.BulletData>();
+
+        //バレットの利用者の種類がPlayerのバレットの情報だけを抽出してListを作成する
+        playerBulletDatas = bulletDataSO.bulletDataList.Where(x => x.liberalType == BulletDataSO.LiberalType.Player).ToList();
+
         for (int i = 0; i < maxBulletBtnNum; i++)
         {
             //バレットボタン生成
             BulletSelectDetail bulletSelectDetail = Instantiate(bulletSelectDetailPrefab, bulletTran, false);
 
             //バレットボタンの設定
-            bulletSelectDetail.SetUpBulletSelectDetail(this, bulletDataSO.bulletDataList[i]);
+            bulletSelectDetail.SetUpBulletSelectDetail(this, playerBulletDatas[i]);
 
             //リストに追加
             bulletSelectDetailList.Add(bulletSelectDetail);
@@ -44,7 +55,7 @@ public class BulletSelectManager : MonoBehaviour
         }
 
         // TODO 使用するバレットの情報を初期設定。後ほど、引数を変更する
-        GameData.instance.SetBulletData(bulletDataSO.bulletDataList[0]);
+        GameData.instance.SetBulletData(playerBulletDatas[0]);
 
        
     }
@@ -158,5 +169,47 @@ public class BulletSelectManager : MonoBehaviour
         //使用可能バレットの確認と更新
         JugdeOpenBullets();
 
+    }
+    /// <summary>
+    /// elementTypeからSprite取得用
+    /// </summary>
+    /// <param name="elementType"></param>
+    /// <returns></returns>
+    public Sprite GetElementTypeSprite(ElementType elementType)
+    {
+        //elementDataList変数の要素を１つずつ順番に取り出して、elementData変数へ代入
+        foreach(ElementDataSO.ElementData elementData in elementDataSO.elementDataList)
+        {
+            //現在代入されているElementDataのElementTypeと引数のelementTypeが同じであるか照合
+            if(elementData.elementType == elementType)
+            {
+                //照合の結果、合致したElementDataに登録されている画像情報を戻す
+                return elementData.elementSprite;
+            }
+        }
+
+        //どれも合致しない場合はnullを戻す
+        return null;
+    }
+    /// <summary>
+    /// BulletTypeよりBulletDataを検索して取得
+    /// </summary>
+    /// <param name="bulletType"></param>
+    /// <returns></returns>
+    public BulletDataSO.BulletData GetBulletData(BulletDataSO.BulletType bulletType)
+    {
+        //引数のBulletTypeと同じbulletTypeが登録されているbulletDataを探す
+        foreach (BulletDataSO.BulletData bulletData in bulletDataSO.bulletDataList.Where(x => x.bulletType == bulletType))
+        {
+
+            Debug.Log("通過");
+            //合致したbulletDataを戻す
+            return bulletData;
+            
+        }
+
+        Debug.Log("nullで通過");
+        //どれも合致しない場合はnullを返す
+        return null;
     }
 }

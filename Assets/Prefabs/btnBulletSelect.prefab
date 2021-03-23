@@ -450,6 +450,7 @@ MonoBehaviour:
   imgBulletBtn: {fileID: 55760985356145866}
   imgLaunchTimeGauge: {fileID: 5787149902166092190}
   txtOpenExpValue: {fileID: 7589046597784807965}
+  imgElementTypeBackground: {fileID: 9171593142484945216}
   bulletData:
     no: 0
     bulletSpeed: 0
@@ -462,4 +463,5 @@ MonoBehaviour:
     launchTime: 0
     bulletSprite: {fileID: 0}
     discription: 
+    elementType: 0
   isDefaultBullet: 0

@@ -36,6 +36,9 @@ public class Gamemanager : MonoBehaviour
 
         SwitchGameUp(false);
 
+        //Main用のBGMを再生
+        SoundManager.instance.PlayBGM(SoundDataSO.BgmType.Main);
+
         defenceBase.SetUpDefenceBase(this);
 
         playerController.SetUpPlayer(this);
@@ -50,13 +53,15 @@ public class Gamemanager : MonoBehaviour
 
         uiManager.HideBossAlertSet();
 
-        yield return StartCoroutine(bulletSelectManager.GenerateBulletSelectDetail(this));
+        yield return StartCoroutine(bulletSelectManager.GenerateBulletSelectDetail(this));   
 
         yield return StartCoroutine(uiManager.PlayOpening());
 
         bulletSelectManager.JugdeOpenBullets();
 
         isSetUpEnd = true;
+
+        
     }
 
     // Update is called once per frame

@@ -20,6 +20,9 @@ public class BulletSelectDetail : MonoBehaviour
     [SerializeField]
     private Text txtOpenExpValue;
 
+    [SerializeField]
+    private Image imgElementTypeBackground; //バレット選択ボタンの拝啓画像の設定用
+
     public BulletDataSO.BulletData bulletData;
 
     private float launchTime; //バレットを発射できる残り時間
@@ -75,6 +78,9 @@ public class BulletSelectDetail : MonoBehaviour
             // TODO そのほかに設定する処理を追加
 
         }
+
+        //拝啓の属性画像の変更
+        imgElementTypeBackground.sprite = bulletSelectManager.GetElementTypeSprite(this.bulletData.elementType);
 
     }
 

@@ -120,10 +120,11 @@ public class EnemyGenerator : MonoBehaviour
        enemyController.SetUpEnemy(enemyData);
        
        //Boss以外でも追加設定を行う
-       enemyController.AdditionalSetUPEnemy(this);
+       enemyController.AdditionalSetUPEnemy(this, gamemanager.bulletSelectManager.GetBulletData(enemyData.bulletType));
+        
 
-        //Listに生成したエネミーの情報を追加
-        enemiesList.Add(enemyController);
+       //Listに生成したエネミーの情報を追加
+       enemiesList.Add(enemyController);
         
     }
 
@@ -132,7 +133,7 @@ public class EnemyGenerator : MonoBehaviour
         //ボス出現の警告演出
         yield return StartCoroutine(gamemanager.uiManager.PlayBossAlert());
 
-
+        SoundManager.instance.PlayVoice(SoundDataSO.VoiceType.Warning);
         //ボス生成
         GenerateEnemy(EnemyType.Boss);
 

@@ -144,6 +144,7 @@ public class UIManager : MonoBehaviour
             {
                 //ゲームスタートのロゴ画像を跳ねさせながら、画面外の左端からゲーム画面の中央へ移動
                 imgGameStart.transform.DOLocalJump(Vector3.zero, 300f, 3, 1.5f).SetEase(Ease.Linear);
+                SoundManager.instance.PlayVoice(SoundDataSO.VoiceType.Start);
             });
 
         //一時処理を中断（ゲームスタートのロゴが画面の中央で停止したままになる）
@@ -160,6 +161,9 @@ public class UIManager : MonoBehaviour
 
     public IEnumerator PlayBossAlert()
     {
+        //ボス用のBGM再生
+        SoundManager.instance.PlayBGM(SoundDataSO.BgmType.Boss);
+
         canvasGroupBossAlert.transform.parent.gameObject.SetActive(true);
         canvasGroupBossAlert.DOFade(1.0f, 0.5f).SetLoops(6, LoopType.Yoyo);
         yield return new WaitForSeconds(3f);
